@@ -8,7 +8,7 @@ import {
 } from '../utils/cloudinaryFiles.js'
 import { buildImageMetadata, parseJsonField } from '../utils/requestData.js'
 
-const editableFields = ['title', 'album', 'era', 'releaseYear']
+const editableFields = ['title', 'artist', 'album', 'era', 'releaseYear']
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
@@ -64,6 +64,7 @@ export const createSong = async (req, res, next) => {
 
     const song = await Song.create({
       title: req.body.title,
+      artist: req.body.artist || 'Taylor Swift',
       album: req.body.album,
       era: req.body.era,
       releaseYear: req.body.releaseYear,

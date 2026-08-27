@@ -2,10 +2,21 @@ import 'dotenv/config'
 import mongoose from 'mongoose'
 import { connectDatabase } from '../config/database.js'
 import { songSeedData } from '../data/songSeedData.js'
+import { surpriseSongSeedData } from '../data/surpriseSongSeedData.js'
 import Song from '../models/Song.js'
 
+const allSongSeedData = [...songSeedData, ...surpriseSongSeedData].map(
+  (song) => ({
+    ...song,
+    sources: song.sources.map((source) => ({
+      ...source,
+      accessedAt: new Date(source.accessedAt)
+    }))
+  })
+)
+
 const validateSeedData = async () => {
-  const normalizedTitles = songSeedData.map((song) =>
+  const normalizedTitles = allSongSeedData.map((song) =>
     song.title.trim().toLocaleLowerCase('en')
   )
   const duplicateTitles = normalizedTitles.filter(
@@ -18,7 +29,7 @@ const validateSeedData = async () => {
     )
   }
 
-  await Promise.all(songSeedData.map((song) => new Song(song).validate()))
+  await Promise.all(allSongSeedData.map((song) => new Song(song).validate()))
 }
 
 const seedSongs = async () => {
@@ -26,11 +37,12 @@ const seedSongs = async () => {
     await validateSeedData()
     await connectDatabase()
 
-    const operations = songSeedData.map((song) => ({
+    const operations = allSongSeedData.map((song) => ({
       updateOne: {
         filter: { title: song.title },
         update: {
           $set: {
+            artist: song.artist,
             album: song.album,
             era: song.era,
             releaseYear: song.releaseYear,
@@ -48,7 +60,7 @@ const seedSongs = async () => {
 
     const result = await Song.bulkWrite(operations)
 
-    console.log(`Song seed checked: ${songSeedData.length}`)
+    console.log(`Song seed checked: ${allSongSeedData.length}`)
     console.log(`Songs created: ${result.upsertedCount}`)
     console.log(`Songs updated: ${result.modifiedCount}`)
   } catch (error) {

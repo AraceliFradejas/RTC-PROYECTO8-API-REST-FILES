@@ -7,6 +7,7 @@ const source = {
 const createSongs = (album, era, releaseYear, titles) =>
   titles.map((title) => ({
     title,
+    artist: 'Taylor Swift',
     album,
     era,
     releaseYear,

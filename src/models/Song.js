@@ -9,6 +9,12 @@ const songSchema = new mongoose.Schema(
       unique: true,
       trim: true
     },
+    artist: {
+      type: String,
+      required: true,
+      trim: true,
+      default: 'Taylor Swift'
+    },
     album: {
       type: String,
       required: true,
