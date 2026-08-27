@@ -1,6 +1,7 @@
 import cors from 'cors'
 import 'dotenv/config'
 import express from 'express'
+import { configureCloudinary } from './config/cloudinary.js'
 import { connectDatabase } from './config/database.js'
 
 const app = express()
@@ -23,6 +24,7 @@ app.use((req, res) => {
 
 const startServer = async () => {
   try {
+    configureCloudinary()
     await connectDatabase()
 
     app.listen(PORT, () => {
