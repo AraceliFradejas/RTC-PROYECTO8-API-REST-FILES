@@ -66,6 +66,10 @@ const concertSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    openingActs: {
+      type: [String],
+      default: []
+    },
     showNumber: {
       type: Number,
       required: true,

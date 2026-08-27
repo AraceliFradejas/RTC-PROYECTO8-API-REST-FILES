@@ -23,11 +23,11 @@ const editableFields = [
 const concertPopulate = [
   {
     path: 'regularSongs',
-    select: 'title album era releaseYear image'
+    select: 'title artist album era releaseYear image'
   },
   {
     path: 'surprisePerformances.songs',
-    select: 'title album era releaseYear image'
+    select: 'title artist album era releaseYear image'
   }
 ]
 
@@ -142,6 +142,12 @@ export const createConcert = async (req, res, next) => {
     }
 
     const { regularSongs, surprisePerformances } = parseConcertRelations(req.body)
+    const openingActs = parseJsonField(req.body.openingActs, 'openingActs', [])
+
+    if (!Array.isArray(openingActs)) {
+      throw new AppError('openingActs must be a JSON array', 400)
+    }
+
     await validateSongReferences(regularSongs, surprisePerformances)
 
     uploadedImage = await uploadImageToCloudinary(
@@ -155,6 +161,7 @@ export const createConcert = async (req, res, next) => {
       venue: req.body.venue,
       date: req.body.date,
       tourLeg: req.body.tourLeg,
+      openingActs,
       showNumber: req.body.showNumber,
       setlistVersion: req.body.setlistVersion,
       regularSongs,
@@ -212,6 +219,16 @@ export const updateConcert = async (req, res, next) => {
 
     if (req.body.sources !== undefined) {
       concert.sources = parseJsonField(req.body.sources, 'sources', [])
+    }
+
+    if (req.body.openingActs !== undefined) {
+      const openingActs = parseJsonField(req.body.openingActs, 'openingActs', [])
+
+      if (!Array.isArray(openingActs)) {
+        throw new AppError('openingActs must be a JSON array', 400)
+      }
+
+      concert.openingActs = openingActs
     }
 
     if (req.file) {

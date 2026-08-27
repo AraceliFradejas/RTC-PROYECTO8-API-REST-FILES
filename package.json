@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "seed:songs": "node src/seeds/seedSongs.js"
+    "seed:songs": "node src/seeds/seedSongs.js",
+    "seed:concerts": "node src/seeds/seedConcerts.js",
+    "seed": "npm run seed:songs && npm run seed:concerts"
   },
   "keywords": [
     "express",
