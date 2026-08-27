@@ -4,6 +4,14 @@ API REST dedicada a documentar los conciertos, repertorios y canciones sorpresa 
 
 Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO | API REST]** del máster **ROCK THE CODE** de **The Power Tech School**.
 
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![Mongoose](https://img.shields.io/badge/Mongoose-9.x-880000?logo=mongoose&logoColor=white)](https://mongoosejs.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-2.x-3448C5?logo=cloudinary&logoColor=white)](https://cloudinary.com/)
+[![Multer](https://img.shields.io/badge/Multer-2.x-333333)](https://github.com/expressjs/multer)
+[![Insomnia](https://img.shields.io/badge/Insomnia-API%20testing-4000BF?logo=insomnia&logoColor=white)](https://insomnia.rest/)
+
 > **Estado del proyecto:** terminado y verificado. MongoDB Atlas contiene 238 canciones y los 149 conciertos de la gira, con repertorios y canciones sorpresa relacionados. El CRUD, las relaciones y el ciclo completo de archivos en Cloudinary están documentados con evidencias reales.
 
 [Memoria y evidencias completas](docs/MEMORIA.md) · [Colección OpenAPI para Insomnia](docs/openapi.yaml)
