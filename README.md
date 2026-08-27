@@ -176,6 +176,7 @@ La semilla diferencia los repertorios anteriores y posteriores a TTPD e incorpor
 
 - Especificación OpenAPI importable en Insomnia: [`docs/openapi.yaml`](docs/openapi.yaml)
 - Guía ordenada de pruebas y capturas: [`docs/INSOMNIA.md`](docs/INSOMNIA.md)
+- Memoria académica y espacios para evidencias: [`docs/MEMORIA.md`](docs/MEMORIA.md)
 
 ## Documentación y evidencias
 
@@ -346,6 +347,7 @@ The seed uses `upsert` operations, preserves images added through the CRUD and c
 
 - OpenAPI specification for Insomnia: [`docs/openapi.yaml`](docs/openapi.yaml)
 - Ordered testing and screenshot guide: [`docs/INSOMNIA.md`](docs/INSOMNIA.md)
+- Academic report and evidence placeholders: [`docs/MEMORIA.md`](docs/MEMORIA.md)
 
 ## Documentation and evidence
 
