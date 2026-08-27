@@ -79,6 +79,9 @@ Cada documento representará una canción interpretada durante la gira.
 | `album` | Álbum al que pertenece |
 | `era` | Era asociada |
 | `releaseYear` | Año de publicación |
+| `spotifyUrl` | Búsqueda de la canción en Spotify |
+| `appleMusicUrl` | Búsqueda de la canción en Apple Music |
+| `amazonMusicUrl` | Búsqueda de la canción en Amazon Music |
 | `image` | URL, identificador de Cloudinary y datos de atribución |
 | `sources` | Referencias utilizadas para documentar los datos |
 
@@ -92,6 +95,10 @@ Concert.surprisePerformances[].songs[] -> Song._id
 ```
 
 Las consultas de conciertos utilizarán `populate()` para devolver la información de las canciones relacionadas.
+
+### Enlaces musicales
+
+Cada canción incorpora búsquedas en Spotify, Apple Music y Amazon Music construidas con su título, artista y álbum. Se utiliza el mismo criterio del proyecto 6 para evitar asociar una versión incorrecta y permitir que cada plataforma muestre la grabación disponible en la región del usuario. Los mashups no reciben un enlace artificial: la respuesta del concierto contiene cada canción relacionada con sus propios enlaces.
 
 ## Repertorios y canciones sorpresa
 
@@ -218,11 +225,11 @@ El archivo `.env` real contiene secretos y no debe publicarse en un repositorio 
 
 ## Aviso académico y de propiedad intelectual
 
-Este proyecto es un ejercicio académico desarrollado por **Araceli Fradejas Muñoz** como parte de su formación en Backend con Node.js, MongoDB y API REST. Es un proyecto independiente, no oficial y realizado desde el cariño, el respeto y la admiración de una swiftie por Taylor Swift y *The Eras Tour*.
+He desarrollado este proyecto como ejercicio académico dentro de mi formación en Backend con Node.js, MongoDB y API REST. Soy **Araceli Fradejas Muñoz**, y he realizado este proyecto independiente y no oficial desde el cariño, el respeto y mi admiración como swiftie por Taylor Swift y *The Eras Tour*.
 
-No está afiliado, patrocinado, autorizado ni respaldado por Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group ni ninguna entidad relacionada con la artista o la gira. Los nombres, marcas, canciones, álbumes, imágenes y demás elementos mencionados pertenecen a sus respectivos titulares.
+No mantengo ninguna afiliación con Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group ni con ninguna entidad relacionada con la artista o la gira. Ninguna de ellas patrocina, autoriza o respalda este trabajo. Reconozco que los nombres, marcas, canciones, álbumes, imágenes y demás elementos mencionados pertenecen a sus respectivos titulares.
 
-El proyecto no persigue ningún fin comercial ni espera obtener retorno económico. Los datos se utilizan exclusivamente con fines educativos y se acompañarán de sus fuentes. Las imágenes incorporadas se limitarán a material propio, recursos con licencia compatible o contenido cuya reutilización esté expresamente permitida, incluyendo la atribución correspondiente cuando sea necesaria.
+No persigo ningún fin comercial ni espero obtener retorno económico. Utilizo los datos exclusivamente con fines educativos y los acompaño de sus fuentes. Limito las imágenes incorporadas a material propio, recursos con licencia compatible o contenido cuya reutilización esté expresamente permitida, e incluyo la atribución correspondiente cuando es necesaria.
 
 ## Autora
 
@@ -298,6 +305,10 @@ Concert.surprisePerformances[].songs[] -> Song._id
 ```
 
 Concert queries will use `populate()` to return the related song information. Surprise performances will preserve their instrument, order and the individual songs included in each mashup.
+
+### Music links
+
+Each song provides Spotify, Apple Music and Amazon Music searches built from its title, artist and album. This follows the same approach as project 6, avoiding an incorrect recording being assigned while allowing each service to show the version available in the user's region. Mashups do not receive an artificial link: every related song returned with the concert has its own music links.
 
 ### Attendance
 
@@ -392,11 +403,11 @@ The real `.env` file contains secrets and must not be published in a public repo
 
 ## Academic and intellectual property notice
 
-This is an independent, unofficial and non-commercial educational project created by **Araceli Fradejas Muñoz** with affection, respect and admiration for Taylor Swift and *The Eras Tour*.
+I am **Araceli Fradejas Muñoz**, and I developed this independent and unofficial academic project as part of my Backend training with Node.js, MongoDB and REST APIs. I created it with affection, respect and my admiration as a swiftie for Taylor Swift and *The Eras Tour*.
 
-It is not affiliated with, sponsored, authorised or endorsed by Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group or any other entity connected with the artist or the tour. All referenced names, trademarks, songs, albums, images and other materials belong to their respective owners.
+I am not affiliated with Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group or any other entity connected with the artist or the tour. None of them sponsors, authorises or endorses this work. I acknowledge that all referenced names, trademarks, songs, albums, images and other materials belong to their respective owners.
 
-The project is intended solely for educational purposes and does not seek or expect any financial return. Data sources will be referenced, and included images will be limited to original material, compatibly licensed resources or content whose reuse is expressly permitted, with attribution when required.
+I use this project solely for educational purposes and neither seek nor expect any financial return. I reference the data sources and limit included images to my own material, compatibly licensed resources or content whose reuse is expressly permitted, providing attribution whenever required.
 
 ## Author
 

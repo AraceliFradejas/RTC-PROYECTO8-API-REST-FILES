@@ -24,11 +24,13 @@ const editableFields = [
 const concertPopulate = [
   {
     path: 'regularSongs',
-    select: 'title artist album era releaseYear image'
+    select:
+      'title artist album era releaseYear spotifyUrl appleMusicUrl amazonMusicUrl image'
   },
   {
     path: 'surprisePerformances.songs',
-    select: 'title artist album era releaseYear image'
+    select:
+      'title artist album era releaseYear spotifyUrl appleMusicUrl amazonMusicUrl image'
   }
 ]
 

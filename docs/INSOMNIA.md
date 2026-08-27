@@ -37,6 +37,9 @@ En `POST /songs`, selecciona **Multipart Form** y completa:
 | `album` | Text | `Test Album` |
 | `era` | Text | `Test Era` |
 | `releaseYear` | Text | `2024` |
+| `spotifyUrl` | Text | Opcional; búsqueda o pista de Spotify |
+| `appleMusicUrl` | Text | Opcional; búsqueda o pista de Apple Music |
+| `amazonMusicUrl` | Text | Opcional; búsqueda o pista de Amazon Music |
 | `image` | File | Imagen de prueba con uso permitido |
 | `imageAlt` | Text | `Imagen de prueba de la canción` |
 | `imageSourceUrl` | Text | URL de procedencia, si corresponde |

@@ -22,6 +22,7 @@ La aplicación separa responsabilidades en configuración, modelos, controladore
 - Semillas idempotentes basadas en `upsert`.
 - Tres fechas canceladas en Viena documentadas aparte, sin alterar el total de conciertos realizados.
 - Asistencia individual opcional, diferenciando cifras comunicadas y estimaciones con su fuente.
+- Búsquedas de cada canción en Spotify, Apple Music y Amazon Music.
 
 La segunda ejecución verificada de ambas semillas produjo 0 creaciones y 0 actualizaciones, por lo que no genera duplicados cuando los datos ya están sincronizados.
 

@@ -205,6 +205,9 @@ components:
         album: { type: string }
         era: { type: string }
         releaseYear: { type: integer }
+        spotifyUrl: { type: string, format: uri, nullable: true }
+        appleMusicUrl: { type: string, format: uri, nullable: true }
+        amazonMusicUrl: { type: string, format: uri, nullable: true }
         image: { $ref: '#/components/schemas/Image' }
         sources:
           type: array
@@ -300,6 +303,9 @@ components:
             album: { type: string }
             era: { type: string }
             releaseYear: { type: integer }
+            spotifyUrl: { type: string, format: uri }
+            appleMusicUrl: { type: string, format: uri }
+            amazonMusicUrl: { type: string, format: uri }
     SongUpdateForm:
       allOf:
         - $ref: '#/components/schemas/FileMetadataFields'
@@ -310,6 +316,9 @@ components:
             album: { type: string }
             era: { type: string }
             releaseYear: { type: integer }
+            spotifyUrl: { type: string, format: uri }
+            appleMusicUrl: { type: string, format: uri }
+            amazonMusicUrl: { type: string, format: uri }
     ConcertForm:
       allOf:
         - $ref: '#/components/schemas/FileMetadataFields'

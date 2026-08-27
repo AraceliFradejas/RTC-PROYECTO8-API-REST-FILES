@@ -8,12 +8,23 @@ import Song from '../models/Song.js'
 const allSongSeedData = [...songSeedData, ...surpriseSongSeedData].map(
   (song) => ({
     ...song,
+    ...buildStreamingLinks(song),
     sources: song.sources.map((source) => ({
       ...source,
       accessedAt: new Date(source.accessedAt)
     }))
   })
 )
+
+function buildStreamingLinks({ title, artist, album }) {
+  const query = encodeURIComponent(`${title} ${artist} ${album}`)
+
+  return {
+    spotifyUrl: `https://open.spotify.com/search/${query}`,
+    appleMusicUrl: `https://music.apple.com/es/search?term=${query}`,
+    amazonMusicUrl: `https://music.amazon.com/search/${query}`
+  }
+}
 
 const validateSeedData = async () => {
   const normalizedTitles = allSongSeedData.map((song) =>
@@ -46,6 +57,9 @@ const seedSongs = async () => {
             album: song.album,
             era: song.era,
             releaseYear: song.releaseYear,
+            spotifyUrl: song.spotifyUrl,
+            appleMusicUrl: song.appleMusicUrl,
+            amazonMusicUrl: song.amazonMusicUrl,
             sources: song.sources
           },
           $setOnInsert: {

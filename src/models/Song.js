@@ -31,6 +31,21 @@ const songSchema = new mongoose.Schema(
       min: 2006,
       max: new Date().getFullYear()
     },
+    spotifyUrl: {
+      type: String,
+      trim: true,
+      default: null
+    },
+    appleMusicUrl: {
+      type: String,
+      trim: true,
+      default: null
+    },
+    amazonMusicUrl: {
+      type: String,
+      trim: true,
+      default: null
+    },
     image: {
       type: imageSchema,
       default: null
