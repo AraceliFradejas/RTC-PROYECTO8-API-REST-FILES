@@ -4,7 +4,7 @@ API REST dedicada a documentar los conciertos, repertorios y canciones sorpresa 
 
 Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO | API REST]** del máster **ROCK THE CODE** de **The Power Tech School**.
 
-> **Estado del proyecto:** backend en desarrollo. El servidor, las conexiones con MongoDB Atlas y Cloudinary, los modelos, ambos CRUD y la primera semilla de canciones ya están implementados. Continúa la recopilación contrastada de canciones sorpresa y conciertos.
+> **Estado del proyecto:** backend implementado. MongoDB Atlas contiene 238 canciones y los 149 conciertos de la gira, con repertorios y canciones sorpresa relacionados. Quedan las pruebas multipart finales y la recopilación de evidencias.
 
 [English version](#english-version)
 
@@ -31,7 +31,7 @@ El proyecto se desarrollará con los siguientes objetivos:
 - Documentar los endpoints, las decisiones técnicas, las fuentes y las pruebas.
 - Aportar evidencias visuales de MongoDB Atlas, Cloudinary e Insomnia.
 
-## Tecnologías previstas
+## Tecnologías
 
 - Node.js
 - Express
@@ -39,7 +39,6 @@ El proyecto se desarrollará con los siguientes objetivos:
 - Mongoose
 - Cloudinary
 - Multer
-- Multer Storage Cloudinary
 - dotenv
 - CORS
 - Insomnia
@@ -59,6 +58,7 @@ Cada documento representará uno de los conciertos de la gira.
 | `venue` | Estadio o recinto |
 | `date` | Fecha del concierto |
 | `tourLeg` | Etapa geográfica de la gira |
+| `openingActs` | Artistas de apertura |
 | `showNumber` | Número de concierto |
 | `setlistVersion` | Versión del espectáculo anterior o posterior a TTPD |
 | `regularSongs` | Referencias a las canciones del repertorio habitual |
@@ -74,6 +74,7 @@ Cada documento representará una canción interpretada durante la gira.
 | Campo | Descripción |
 | --- | --- |
 | `title` | Título de la canción |
+| `artist` | Artista principal o invitado |
 | `album` | Álbum al que pertenece |
 | `era` | Era asociada |
 | `releaseYear` | Año de publicación |
@@ -124,9 +125,9 @@ Cada concierto podrá almacenar los enlaces consultados y la fecha de acceso. Lo
 
 Las imágenes no se descargarán ni reutilizarán solamente por estar disponibles en Internet. Se emplearán fotografías propias, recursos con una licencia compatible o imágenes cuya reutilización esté expresamente permitida. Cuando corresponda, se almacenarán y documentarán la autoría, la fuente y la licencia.
 
-## Endpoints planificados
+## Endpoints
 
-URL base local prevista: `http://localhost:5050/api`.
+URL base local: `http://localhost:5050/api`.
 
 ### Canciones
 
@@ -150,13 +151,15 @@ URL base local prevista: `http://localhost:5050/api`.
 
 La documentación se ampliará durante el desarrollo con filtros, campos admitidos, ejemplos de peticiones, respuestas, validaciones y códigos de estado.
 
-## Semilla y calidad de los datos
+## Semillas y calidad de los datos
 
-El comando siguiente carga 55 canciones del repertorio habitual y sus principales variaciones:
+La semilla completa carga 238 canciones y los 149 conciertos de la gira:
 
 ```bash
-npm run seed:songs
+npm run seed
 ```
+
+También se pueden ejecutar por separado con `npm run seed:songs` y `npm run seed:concerts`. Primero deben cargarse las canciones porque los conciertos almacenan sus identificadores como relaciones.
 
 La semilla utiliza operaciones `upsert`, conserva las imágenes incorporadas mediante el CRUD y puede ejecutarse repetidamente sin crear ni modificar documentos cuando los datos ya están actualizados. Antes de conectarse valida, entre otros aspectos:
 
@@ -167,7 +170,12 @@ La semilla utiliza operaciones `upsert`, conserva las imágenes incorporadas med
 - Diferencias entre los repertorios anteriores y posteriores a TTPD.
 - Estructura de las canciones sorpresa y sus mashups.
 
-El catálogo se ampliará con las canciones sorpresa a medida que se contrasten los 149 conciertos. El objetivo final es documentar toda la gira de forma progresiva y verificable.
+La semilla diferencia los repertorios anteriores y posteriores a TTPD e incorpora las variaciones documentadas de determinados conciertos. Se ha comprobado ejecutándola dos veces: la segunda ejecución crea 0 documentos y actualiza 0.
+
+## Documentación de pruebas
+
+- Especificación OpenAPI importable en Insomnia: [`docs/openapi.yaml`](docs/openapi.yaml)
+- Guía ordenada de pruebas y capturas: [`docs/INSOMNIA.md`](docs/INSOMNIA.md)
 
 ## Documentación y evidencias
 
@@ -229,7 +237,7 @@ The Eras Tour API REST Files is planned as a digital archive of the concerts per
 
 This API REST Files project is an assignment for **MODULE 5: BACKEND [NODE | MONGO | API REST]** of the **ROCK THE CODE** master's programme at **The Power Tech School**.
 
-> **Project status:** backend under development. The server, MongoDB Atlas and Cloudinary connections, models, both CRUD implementations and the initial song seed are complete. Cross-checking surprise songs and concerts remains in progress.
+> **Project status:** backend implemented. MongoDB Atlas contains 238 songs and all 149 tour concerts, with related setlists and surprise songs. Final multipart tests and visual evidence remain to be completed.
 
 The application will provide information about dates, cities, countries, venues, tour legs, regular setlists, surprise songs, instruments and mashups performed at each show.
 
@@ -250,7 +258,7 @@ The project will:
 - Document endpoints, technical decisions, sources and tests.
 - Include visual evidence from MongoDB Atlas, Cloudinary and Insomnia.
 
-## Planned technologies
+## Technologies
 
 - Node.js
 - Express
@@ -258,7 +266,6 @@ The project will:
 - Mongoose
 - Cloudinary
 - Multer
-- Multer Storage Cloudinary
 - dotenv
 - CORS
 - Insomnia
@@ -297,9 +304,9 @@ Concert data will be checked against public references such as Taylor Swift's of
 
 Images will not be reused merely because they are available online. The project will use original photographs, compatibly licensed resources or images whose reuse is expressly permitted. Authorship, source and licence information will be recorded whenever required.
 
-## Planned endpoints
+## Endpoints
 
-Planned local base URL: `http://localhost:5050/api`.
+Local base URL: `http://localhost:5050/api`.
 
 ### Songs
 
@@ -323,17 +330,22 @@ Planned local base URL: `http://localhost:5050/api`.
 
 The documentation will be expanded during development with filters, accepted fields, request and response examples, validation rules and HTTP status codes.
 
-## Seed and data quality
+## Seeds and data quality
 
-The following command loads 55 regular-setlist songs and principal variations:
+The complete seed loads 238 songs and all 149 tour concerts:
 
 ```bash
-npm run seed:songs
+npm run seed
 ```
 
-The seed uses `upsert` operations, preserves images added through the CRUD and can be run repeatedly without duplicating or modifying documents when the data is already current. It validates duplicate titles and model rules before connecting.
+The seeds can also run separately with `npm run seed:songs` and `npm run seed:concerts`. Songs must be loaded first because concerts store their identifiers as relationships.
 
-The catalogue will be expanded with surprise songs while the 149 concerts are cross-checked. The final aim is to document the complete tour progressively using verifiable sources.
+The seed uses `upsert` operations, preserves images added through the CRUD and can be repeated without duplicates. A second verified run created 0 documents and updated 0. It distinguishes the pre- and post-TTPD setlists and includes documented show variations.
+
+## Test documentation
+
+- OpenAPI specification for Insomnia: [`docs/openapi.yaml`](docs/openapi.yaml)
+- Ordered testing and screenshot guide: [`docs/INSOMNIA.md`](docs/INSOMNIA.md)
 
 ## Documentation and evidence
 

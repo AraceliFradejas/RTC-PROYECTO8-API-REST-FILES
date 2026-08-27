@@ -1,0 +1,368 @@
+openapi: 3.0.3
+info:
+  title: The Eras Tour API REST Files
+  version: 1.0.0
+  description: API académica de conciertos, repertorios y canciones de The Eras Tour.
+  contact:
+    name: Araceli Fradejas Muñoz
+    url: https://github.com/AraceliFradejas
+servers:
+  - url: http://localhost:5050/api
+    description: Servidor local
+tags:
+  - name: General
+  - name: Songs
+  - name: Concerts
+paths:
+  /:
+    get:
+      tags: [General]
+      summary: Comprobar el estado de la API
+      responses:
+        '200':
+          description: API disponible
+  /songs:
+    get:
+      tags: [Songs]
+      summary: Obtener y filtrar canciones
+      parameters:
+        - { name: title, in: query, schema: { type: string } }
+        - { name: album, in: query, schema: { type: string } }
+        - { name: era, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: Lista de canciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Song' }
+    post:
+      tags: [Songs]
+      summary: Crear una canción y subir su imagen
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/SongForm' }
+      responses:
+        '201': { description: Canción creada }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /songs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags: [Songs]
+      summary: Obtener una canción por ID
+      responses:
+        '200': { description: Canción encontrada }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Songs]
+      summary: Actualizar una canción y sustituir opcionalmente su imagen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/SongUpdateForm' }
+      responses:
+        '200': { description: Canción actualizada }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Songs]
+      summary: Eliminar una canción y su imagen de Cloudinary
+      description: Devuelve 409 si todavía está relacionada con un concierto.
+      responses:
+        '200': { description: Canción e imagen eliminadas }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { description: La canción está relacionada con un concierto }
+  /concerts:
+    get:
+      tags: [Concerts]
+      summary: Obtener y filtrar conciertos con sus relaciones
+      parameters:
+        - { name: city, in: query, schema: { type: string } }
+        - { name: country, in: query, schema: { type: string } }
+        - { name: tourLeg, in: query, schema: { type: string } }
+        - name: setlistVersion
+          in: query
+          schema: { type: string, enum: [pre-ttpd, post-ttpd] }
+      responses:
+        '200':
+          description: Conciertos ordenados por número de show
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Concert' }
+    post:
+      tags: [Concerts]
+      summary: Crear un concierto y subir su imagen
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/ConcertForm' }
+      responses:
+        '201': { description: Concierto creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /concerts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags: [Concerts]
+      summary: Obtener un concierto por ID
+      responses:
+        '200':
+          description: Concierto con relaciones pobladas
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Concert' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Concerts]
+      summary: Actualizar un concierto y sustituir opcionalmente su imagen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/ConcertUpdateForm' }
+      responses:
+        '200': { description: Concierto actualizado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Concerts]
+      summary: Eliminar un concierto y su imagen de Cloudinary
+      responses:
+        '200': { description: Concierto e imagen eliminados }
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  parameters:
+    DocumentId:
+      name: id
+      in: path
+      required: true
+      description: Identificador ObjectId de MongoDB
+      schema: { type: string, example: 507f1f77bcf86cd799439011 }
+  responses:
+    BadRequest:
+      description: Datos incorrectos o incompletos
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Documento no encontrado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+    Image:
+      type: object
+      nullable: true
+      properties:
+        url: { type: string, format: uri }
+        publicId: { type: string }
+        sourceUrl: { type: string, format: uri, nullable: true }
+        author: { type: string, nullable: true }
+        license: { type: string, nullable: true }
+        licenseUrl: { type: string, format: uri, nullable: true }
+        alt: { type: string }
+    Source:
+      type: object
+      required: [label, url]
+      properties:
+        label: { type: string }
+        url: { type: string, format: uri }
+        accessedAt: { type: string, format: date }
+    Song:
+      type: object
+      properties:
+        _id: { type: string }
+        title: { type: string }
+        artist: { type: string, example: Taylor Swift }
+        album: { type: string }
+        era: { type: string }
+        releaseYear: { type: integer }
+        image: { $ref: '#/components/schemas/Image' }
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/Source' }
+    SurprisePerformance:
+      type: object
+      properties:
+        order: { type: integer, minimum: 1 }
+        instrument: { type: string, enum: [guitar, piano] }
+        songs:
+          type: array
+          items: { $ref: '#/components/schemas/Song' }
+        guests:
+          type: array
+          items: { type: string }
+        notes: { type: string, nullable: true }
+    Concert:
+      type: object
+      properties:
+        _id: { type: string }
+        city: { type: string }
+        country: { type: string }
+        venue: { type: string }
+        date: { type: string, format: date-time }
+        tourLeg: { type: string }
+        openingActs:
+          type: array
+          items: { type: string }
+        showNumber: { type: integer, minimum: 1, maximum: 149 }
+        setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+        regularSongs:
+          type: array
+          items: { $ref: '#/components/schemas/Song' }
+        surprisePerformances:
+          type: array
+          items: { $ref: '#/components/schemas/SurprisePerformance' }
+        image: { $ref: '#/components/schemas/Image' }
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/Source' }
+        notes: { type: string, nullable: true }
+    FileMetadataFields:
+      type: object
+      properties:
+        image: { type: string, format: binary }
+        imageAlt: { type: string }
+        imageSourceUrl: { type: string, format: uri }
+        imageAuthor: { type: string }
+        imageLicense: { type: string }
+        imageLicenseUrl: { type: string, format: uri }
+        sources:
+          type: string
+          description: Array JSON serializado con las fuentes
+    SongForm:
+      allOf:
+        - $ref: '#/components/schemas/FileMetadataFields'
+        - type: object
+          required: [title, album, era, releaseYear, image, imageAlt]
+          properties:
+            title: { type: string }
+            artist: { type: string, default: Taylor Swift }
+            album: { type: string }
+            era: { type: string }
+            releaseYear: { type: integer }
+    SongUpdateForm:
+      allOf:
+        - $ref: '#/components/schemas/FileMetadataFields'
+        - type: object
+          properties:
+            title: { type: string }
+            artist: { type: string }
+            album: { type: string }
+            era: { type: string }
+            releaseYear: { type: integer }
+    ConcertForm:
+      allOf:
+        - $ref: '#/components/schemas/FileMetadataFields'
+        - type: object
+          required:
+            - city
+            - country
+            - venue
+            - date
+            - tourLeg
+            - showNumber
+            - setlistVersion
+            - regularSongs
+            - image
+            - imageAlt
+          properties:
+            city: { type: string }
+            country: { type: string }
+            venue: { type: string }
+            date: { type: string, format: date }
+            tourLeg: { type: string }
+            showNumber: { type: integer }
+            setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+            openingActs: { type: string, description: Array JSON serializado }
+            regularSongs: { type: string, description: Array JSON de ObjectId }
+            surprisePerformances: { type: string, description: Array JSON }
+            notes: { type: string }
+    ConcertUpdateForm:
+      allOf:
+        - $ref: '#/components/schemas/FileMetadataFields'
+        - type: object
+          properties:
+            city: { type: string }
+            country: { type: string }
+            venue: { type: string }
+            date: { type: string, format: date }
+            tourLeg: { type: string }
+            showNumber: { type: integer }
+            setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+            openingActs: { type: string, description: Array JSON serializado }
+            regularSongs: { type: string, description: Array JSON de ObjectId }
+            surprisePerformances: { type: string, description: Array JSON }
+            notes: { type: string }
+  /songs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      tags: [Songs]
+      summary: Obtener una canción por ID
+      responses:
+        '200':
+          description: Canción encontrada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Song' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Songs]
+      summary: Actualizar una canción y sustituir opcionalmente su imagen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/SongUpdateForm' }
+      responses:
+        '200': { description: Canción actualizada }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Songs]
+      summary: Eliminar una canción y su imagen de Cloudinary
+      description: Devuelve 409 si la canción todavía está relacionada con un concierto.
+      responses:
+        '200': { description: Canción e imagen eliminadas }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { description: La canción está relacionada con un concierto }
+  /concerts:
+    get:
+      tags: [Concerts]
+      summary: Obtener y filtrar conciertos con sus canciones relacionadas
+      parameters:
+        - { name: city, in: query, schema: { type: string } }
+        - { name: country, in: query, schema: { type: string } }
+        - { name: tourLeg, in: query, schema: { type: string } }
+        - name: setlistVersion
+          in: query
+          schema: { type: string, enum: [pre-ttpd, post-ttpd] }
+      responses:
+        '200':
+          description: Lista de conciertos ordenada por número de show
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Concert' }
+    post:
+      tags: [Concerts]
+      summary: Crear un concierto y subir su imagen
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: '#/components/schemas/ConcertForm' }
+      responses:
+        '201': { description: Concierto creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
