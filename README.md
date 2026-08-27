@@ -1,0 +1,366 @@
+# The Eras Tour API REST Files
+
+API REST dedicada a documentar los conciertos, repertorios y canciones sorpresa de *The Eras Tour* de Taylor Swift.
+
+Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO | API REST]** del máster **ROCK THE CODE** de **The Power Tech School**.
+
+> **Estado del proyecto:** primera fase de planificación y documentación. La arquitectura, los modelos y los endpoints descritos en este documento constituyen el diseño previsto y se implementarán progresivamente.
+
+[English version](#english-version)
+
+## Versión en castellano
+
+## Descripción
+
+The Eras Tour API REST Files será un archivo digital de los conciertos realizados durante *The Eras Tour*. La aplicación permitirá consultar las fechas, ciudades, países, recintos, etapas de la gira, repertorios habituales, canciones sorpresa, instrumentos y mashups interpretados en cada concierto.
+
+La temática nace de una motivación personal: no pude asistir al concierto de Madrid pese a intentar comprar las entradas desde el primer día. Este proyecto es una forma de recorrer, estudiar y disfrutar *The Eras Tour* a través del aprendizaje de desarrollo backend.
+
+## Objetivos académicos
+
+El proyecto se desarrollará con los siguientes objetivos:
+
+- Crear un servidor con Express.
+- Conectar la aplicación con MongoDB Atlas mediante Mongoose.
+- Crear dos modelos relacionados, ambos con un campo para almacenar un archivo.
+- Implementar el CRUD completo de las dos colecciones.
+- Crear una semilla de datos reproducible y validada.
+- Subir archivos a Cloudinary desde ambas colecciones.
+- Eliminar de Cloudinary los archivos que dejen de utilizarse.
+- Reutilizar la configuración del almacenamiento cambiando la carpeta de destino.
+- Documentar los endpoints, las decisiones técnicas, las fuentes y las pruebas.
+- Aportar evidencias visuales de MongoDB Atlas, Cloudinary e Insomnia.
+
+## Tecnologías previstas
+
+- Node.js
+- Express
+- MongoDB Atlas
+- Mongoose
+- Cloudinary
+- Multer
+- Multer Storage Cloudinary
+- dotenv
+- CORS
+- Insomnia
+
+## Modelos y relaciones
+
+La API tendrá dos colecciones principales: `Concert` y `Song`.
+
+### Concert
+
+Cada documento representará uno de los conciertos de la gira.
+
+| Campo | Descripción |
+| --- | --- |
+| `city` | Ciudad del concierto |
+| `country` | País |
+| `venue` | Estadio o recinto |
+| `date` | Fecha del concierto |
+| `tourLeg` | Etapa geográfica de la gira |
+| `showNumber` | Número de concierto |
+| `setlistVersion` | Versión del espectáculo anterior o posterior a TTPD |
+| `regularSongs` | Referencias a las canciones del repertorio habitual |
+| `surprisePerformances` | Actuaciones sorpresa, instrumento y posibles mashups |
+| `image` | URL, identificador de Cloudinary y datos de atribución |
+| `sources` | Enlaces utilizados para contrastar la información |
+| `notes` | Particularidades, invitados o cambios excepcionales |
+
+### Song
+
+Cada documento representará una canción interpretada durante la gira.
+
+| Campo | Descripción |
+| --- | --- |
+| `title` | Título de la canción |
+| `album` | Álbum al que pertenece |
+| `era` | Era asociada |
+| `releaseYear` | Año de publicación |
+| `image` | URL, identificador de Cloudinary y datos de atribución |
+| `sources` | Referencias utilizadas para documentar los datos |
+
+### Relación entre colecciones
+
+Un concierto contiene numerosas canciones y una misma canción puede aparecer en muchos conciertos. La relación será de muchos a muchos mediante referencias de Mongoose:
+
+```text
+Concert.regularSongs[]                 -> Song._id
+Concert.surprisePerformances[].songs[] -> Song._id
+```
+
+Las consultas de conciertos utilizarán `populate()` para devolver la información de las canciones relacionadas.
+
+## Repertorios y canciones sorpresa
+
+La aplicación distinguirá entre:
+
+- El repertorio habitual del concierto.
+- La versión original del espectáculo.
+- La versión modificada después de la publicación de *The Tortured Poets Department*.
+- Las actuaciones sorpresa con guitarra y piano.
+- Las canciones sorpresa individuales y los mashups.
+- Las variaciones, colaboraciones y actuaciones excepcionales.
+
+Las actuaciones sorpresa se representarán de forma independiente para conservar el instrumento, el orden y las canciones que formaron cada mashup.
+
+## Gestión de archivos con Cloudinary
+
+Las dos colecciones admitirán archivos subidos a Cloudinary:
+
+- Los conciertos utilizarán la carpeta `eras-tour/concerts`.
+- Las canciones utilizarán la carpeta `eras-tour/songs`.
+- Se reutilizará una misma configuración de almacenamiento, recibiendo la carpeta como parámetro.
+- Se guardarán tanto la URL segura como el `public_id` de Cloudinary.
+- Al sustituir un archivo se eliminará el anterior cuando la actualización haya finalizado correctamente.
+- Al borrar un documento se eliminará también su archivo de Cloudinary.
+- Si una operación falla después de subir un archivo, se intentará retirar el archivo nuevo para evitar recursos huérfanos.
+
+## Fuentes, imágenes y trazabilidad
+
+La información de los conciertos se contrastará mediante fuentes públicas como la web oficial de Taylor Swift, Setlist.fm, publicaciones musicales, medios periodísticos y otras referencias especializadas.
+
+Cada concierto podrá almacenar los enlaces consultados y la fecha de acceso. Los foros y las comunidades de seguidores podrán utilizarse para localizar información, pero los datos dudosos se contrastarán con fuentes adicionales.
+
+Las imágenes no se descargarán ni reutilizarán solamente por estar disponibles en Internet. Se emplearán fotografías propias, recursos con una licencia compatible o imágenes cuya reutilización esté expresamente permitida. Cuando corresponda, se almacenarán y documentarán la autoría, la fuente y la licencia.
+
+## Endpoints planificados
+
+URL base local prevista: `http://localhost:5000/api`.
+
+### Canciones
+
+| Método | Endpoint | Descripción |
+| --- | --- | --- |
+| GET | `/songs` | Obtener todas las canciones |
+| GET | `/songs/:id` | Obtener una canción por su identificador |
+| POST | `/songs` | Crear una canción y subir su archivo |
+| PUT | `/songs/:id` | Actualizar una canción y, opcionalmente, su archivo |
+| DELETE | `/songs/:id` | Eliminar una canción y su archivo de Cloudinary |
+
+### Conciertos
+
+| Método | Endpoint | Descripción |
+| --- | --- | --- |
+| GET | `/concerts` | Obtener todos los conciertos |
+| GET | `/concerts/:id` | Obtener un concierto y sus canciones relacionadas |
+| POST | `/concerts` | Crear un concierto y subir su archivo |
+| PUT | `/concerts/:id` | Actualizar un concierto y, opcionalmente, su archivo |
+| DELETE | `/concerts/:id` | Eliminar un concierto y su archivo de Cloudinary |
+
+La documentación se ampliará durante el desarrollo con filtros, campos admitidos, ejemplos de peticiones, respuestas, validaciones y códigos de estado.
+
+## Semilla y calidad de los datos
+
+La semilla se diseñará para cargar datos sin crear duplicados y validará, entre otros aspectos:
+
+- Títulos de canciones duplicados.
+- Fechas y números de concierto repetidos.
+- Canciones relacionadas que no existan.
+- Fechas, ciudades, países o recintos incompletos.
+- Diferencias entre los repertorios anteriores y posteriores a TTPD.
+- Estructura de las canciones sorpresa y sus mashups.
+
+El objetivo final es documentar los 149 conciertos de la gira de forma progresiva y contrastada.
+
+## Documentación y evidencias
+
+El proyecto incluirá una memoria académica con:
+
+- Explicación de la arquitectura y las decisiones técnicas.
+- Metodología y fuentes de los datos.
+- Pruebas del CRUD completo en Insomnia.
+- Evidencias de las colecciones y relaciones en MongoDB Atlas.
+- Evidencias de las carpetas y los archivos almacenados en Cloudinary.
+- Comprobaciones de sustitución y eliminación de archivos.
+- Incidencias encontradas y soluciones aplicadas.
+
+## Configuración prevista
+
+El repositorio incluirá un archivo `.env.example` sin credenciales reales:
+
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://...
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+```
+
+El archivo `.env` real contiene secretos y no debe publicarse en un repositorio público. Cuando sea necesario para la corrección, se entregará mediante el canal privado indicado por el centro y las credenciales se rotarán al finalizar.
+
+## Aviso académico y de propiedad intelectual
+
+Este proyecto es un ejercicio académico desarrollado por **Araceli Fradejas Muñoz** como parte de su formación en Backend con Node.js, MongoDB y API REST. Es un proyecto independiente, no oficial y realizado desde el cariño, el respeto y la admiración de una swiftie por Taylor Swift y *The Eras Tour*.
+
+No está afiliado, patrocinado, autorizado ni respaldado por Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group ni ninguna entidad relacionada con la artista o la gira. Los nombres, marcas, canciones, álbumes, imágenes y demás elementos mencionados pertenecen a sus respectivos titulares.
+
+El proyecto no persigue ningún fin comercial ni espera obtener retorno económico. Los datos se utilizan exclusivamente con fines educativos y se acompañarán de sus fuentes. Las imágenes incorporadas se limitarán a material propio, recursos con licencia compatible o contenido cuya reutilización esté expresamente permitida, incluyendo la atribución correspondiente cuando sea necesaria.
+
+## Autora
+
+**Araceli Fradejas Muñoz**
+
+Proyecto realizado para The Power Tech School, máster Rock The Code.
+
+### Redes sociales y enlaces
+
+- GitHub: <https://github.com/AraceliFradejas>
+- LinkedIn: <https://www.linkedin.com/in/araceli-fradejas-munoz-transformaciondigital/>
+- Instagram: <https://www.instagram.com/goldilocks1013x/>
+- X (Twitter): <https://x.com/AraceliFradejas>
+- TikTok: <https://www.tiktok.com/@arucci1>
+- YouTube: <https://www.youtube.com/@aracelifradejasmunoz2758>
+- Medium: <https://medium.com/@araceli.fradejas>
+
+---
+
+## English version
+
+## Description
+
+The Eras Tour API REST Files is planned as a digital archive of the concerts performed during Taylor Swift's *The Eras Tour*.
+
+This API REST Files project is an assignment for **MODULE 5: BACKEND [NODE | MONGO | API REST]** of the **ROCK THE CODE** master's programme at **The Power Tech School**.
+
+> **Project status:** initial planning and documentation phase. The architecture, models and endpoints described below are the intended design and will be implemented progressively.
+
+The application will provide information about dates, cities, countries, venues, tour legs, regular setlists, surprise songs, instruments and mashups performed at each show.
+
+The subject has a personal motivation: I was unable to attend the Madrid concert despite trying to purchase tickets from the first day. This project is a way to explore, study and enjoy *The Eras Tour* through the process of learning backend development.
+
+## Academic goals
+
+The project will:
+
+- Create an Express server.
+- Connect to MongoDB Atlas through Mongoose.
+- Define two related models, both containing a file field.
+- Implement complete CRUD operations for both collections.
+- Provide a reproducible and validated data seed.
+- Upload files from both collections to Cloudinary.
+- Remove files from Cloudinary when they are no longer used.
+- Reuse the storage configuration while changing the destination folder.
+- Document endpoints, technical decisions, sources and tests.
+- Include visual evidence from MongoDB Atlas, Cloudinary and Insomnia.
+
+## Planned technologies
+
+- Node.js
+- Express
+- MongoDB Atlas
+- Mongoose
+- Cloudinary
+- Multer
+- Multer Storage Cloudinary
+- dotenv
+- CORS
+- Insomnia
+
+## Data models and relationship
+
+The API will contain two main collections:
+
+- `Concert`: each document will represent a tour show, its location, date, setlist version, regular songs, surprise performances, image and sources.
+- `Song`: each document will represent a song, its album, era, release year, image and sources.
+
+The many-to-many relationship will use Mongoose references:
+
+```text
+Concert.regularSongs[]                 -> Song._id
+Concert.surprisePerformances[].songs[] -> Song._id
+```
+
+Concert queries will use `populate()` to return the related song information. Surprise performances will preserve their instrument, order and the individual songs included in each mashup.
+
+## File management with Cloudinary
+
+Both collections will support file uploads:
+
+- Concert files will use the `eras-tour/concerts` folder.
+- Song files will use the `eras-tour/songs` folder.
+- A shared storage factory will receive the destination folder as a parameter.
+- The secure URL and Cloudinary `public_id` will be stored.
+- Replaced files will be removed after a successful database update.
+- Deleting a document will also remove its Cloudinary file.
+- If an operation fails after an upload, the newly uploaded resource will be removed whenever possible to avoid orphaned files.
+
+## Sources, images and traceability
+
+Concert data will be checked against public references such as Taylor Swift's official website, Setlist.fm, music publications, news reports and other specialist sources. Each concert may store the consulted URLs and access dates.
+
+Images will not be reused merely because they are available online. The project will use original photographs, compatibly licensed resources or images whose reuse is expressly permitted. Authorship, source and licence information will be recorded whenever required.
+
+## Planned endpoints
+
+Planned local base URL: `http://localhost:5000/api`.
+
+### Songs
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/songs` | Retrieve all songs |
+| GET | `/songs/:id` | Retrieve one song by its identifier |
+| POST | `/songs` | Create a song and upload its file |
+| PUT | `/songs/:id` | Update a song and optionally replace its file |
+| DELETE | `/songs/:id` | Delete a song and its Cloudinary file |
+
+### Concerts
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/concerts` | Retrieve all concerts |
+| GET | `/concerts/:id` | Retrieve a concert and its related songs |
+| POST | `/concerts` | Create a concert and upload its file |
+| PUT | `/concerts/:id` | Update a concert and optionally replace its file |
+| DELETE | `/concerts/:id` | Delete a concert and its Cloudinary file |
+
+The documentation will be expanded during development with filters, accepted fields, request and response examples, validation rules and HTTP status codes.
+
+## Seed and data quality
+
+The seed will avoid duplicate records and validate song titles, concert dates, show numbers, relationships, required location data, setlist versions and surprise-song mashups.
+
+The final aim is to document all 149 tour concerts progressively using cross-checked sources.
+
+## Documentation and evidence
+
+An academic report will document the architecture, technical decisions, data sources, Insomnia CRUD tests, MongoDB Atlas collections and relationships, Cloudinary folders, file replacement and deletion, and any issues encountered during development.
+
+## Planned configuration
+
+The repository will provide a `.env.example` file without real credentials:
+
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://...
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+```
+
+The real `.env` file contains secrets and must not be published in a public repository. If it is required for assessment, it will be provided through the private channel specified by the school and the credentials will be rotated afterwards.
+
+## Academic and intellectual property notice
+
+This is an independent, unofficial and non-commercial educational project created by **Araceli Fradejas Muñoz** with affection, respect and admiration for Taylor Swift and *The Eras Tour*.
+
+It is not affiliated with, sponsored, authorised or endorsed by Taylor Swift, Taylor Nation, TAS Rights Management, Universal Music Group or any other entity connected with the artist or the tour. All referenced names, trademarks, songs, albums, images and other materials belong to their respective owners.
+
+The project is intended solely for educational purposes and does not seek or expect any financial return. Data sources will be referenced, and included images will be limited to original material, compatibly licensed resources or content whose reuse is expressly permitted, with attribution when required.
+
+## Author
+
+**Araceli Fradejas Muñoz**
+
+Project completed for The Power Tech School, Rock The Code master's programme.
+
+### Social media and links
+
+- GitHub: <https://github.com/AraceliFradejas>
+- LinkedIn: <https://www.linkedin.com/in/araceli-fradejas-munoz-transformaciondigital/>
+- Instagram: <https://www.instagram.com/goldilocks1013x/>
+- X (Twitter): <https://x.com/AraceliFradejas>
+- TikTok: <https://www.tiktok.com/@arucci1>
+- YouTube: <https://www.youtube.com/@aracelifradejasmunoz2758>
+- Medium: <https://medium.com/@araceli.fradejas>
