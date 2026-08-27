@@ -106,6 +106,24 @@ paths:
       responses:
         '201': { description: Concierto creado }
         '400': { $ref: '#/components/responses/BadRequest' }
+  /concerts/history/cancellations:
+    get:
+      tags: [Concerts]
+      summary: Consultar las fechas canceladas de Viena
+      description: Las tres fechas programadas se documentan aparte y no cuentan entre los 149 conciertos realizados.
+      responses:
+        '200':
+          description: Fechas canceladas y contexto histórico
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer, example: 3 }
+                  clarification: { type: string }
+                  events:
+                    type: array
+                    items: { $ref: '#/components/schemas/CancelledConcert' }
   /concerts/{id}:
     parameters:
       - $ref: '#/components/parameters/DocumentId'
@@ -228,6 +246,26 @@ components:
           type: array
           items: { $ref: '#/components/schemas/Source' }
         notes: { type: string, nullable: true }
+    CancelledConcert:
+      type: object
+      properties:
+        date: { type: string, format: date }
+        city: { type: string, example: Vienna }
+        country: { type: string, example: Austria }
+        venue: { type: string, example: Ernst-Happel-Stadion }
+        openingActs:
+          type: array
+          items: { type: string }
+        status: { type: string, example: cancelled }
+        reason: { type: string, example: Security threat }
+        notes: { type: string }
+        communityImage:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+        sources:
+          type: array
+          items: { $ref: '#/components/schemas/Source' }
     FileMetadataFields:
       type: object
       properties:

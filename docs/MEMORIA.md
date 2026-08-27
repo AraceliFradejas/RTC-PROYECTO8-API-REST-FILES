@@ -20,8 +20,15 @@ La aplicación separa responsabilidades en configuración, modelos, controladore
 - Dos versiones principales del repertorio: `pre-ttpd` y `post-ttpd`.
 - Variaciones concretas y mashups conservados por fecha, instrumento y orden.
 - Semillas idempotentes basadas en `upsert`.
+- Tres fechas canceladas en Viena documentadas aparte, sin alterar el total de conciertos realizados.
 
 La segunda ejecución verificada de ambas semillas produjo 0 creaciones y 0 actualizaciones, por lo que no genera duplicados cuando los datos ya están sincronizados.
+
+### Nota histórica de Viena
+
+Las fechas previstas para el 8, 9 y 10 de agosto de 2024 en el Ernst-Happel-Stadion se cancelaron tras conocerse una amenaza de atentado. La API conserva este episodio mediante un endpoint histórico independiente y recuerda la reacción de los swifties que se reunieron en las calles de Viena para cantar y compartir pulseras.
+
+Durante la investigación se localizaron fotografías editoriales del encuentro, pero no una imagen de la escena con licencia de reutilización verificable. Por responsabilidad con la propiedad intelectual, el proyecto conserva `communityImage: null` y no descarga esas fotografías. El campo permitirá añadir en el futuro una fotografía cedida por su autora o publicada bajo una licencia compatible.
 
 ## 4. Gestión de archivos
 

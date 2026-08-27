@@ -16,14 +16,15 @@ Realizaremos las peticiones en este orden:
 1. `GET /` para comprobar el servidor.
 2. `GET /songs` y los filtros `title`, `album` y `era`.
 3. `GET /concerts` y los filtros `city`, `country`, `tourLeg` y `setlistVersion`.
-4. `GET /songs/:id` y `GET /concerts/:id`.
-5. Crear una canción de prueba con imagen.
-6. Actualizar la canción y sustituir su imagen.
-7. Crear un concierto de prueba relacionado con canciones existentes.
-8. Actualizar el concierto y sustituir su imagen.
-9. Intentar borrar una canción relacionada para comprobar el error `409`.
-10. Borrar el concierto y comprobar que Cloudinary elimina su imagen.
-11. Borrar la canción y comprobar que Cloudinary elimina su imagen.
+4. `GET /concerts/history/cancellations` para comprobar la nota histórica de Viena.
+5. `GET /songs/:id` y `GET /concerts/:id`.
+6. Crear una canción de prueba con imagen.
+7. Actualizar la canción y sustituir su imagen.
+8. Crear un concierto de prueba relacionado con canciones existentes.
+9. Actualizar el concierto y sustituir su imagen.
+10. Intentar borrar una canción relacionada para comprobar el error `409`.
+11. Borrar el concierto y comprobar que Cloudinary elimina su imagen.
+12. Borrar la canción y comprobar que Cloudinary elimina su imagen.
 
 ## 3. Campos multipart de canciones
 
@@ -79,6 +80,7 @@ Como la semilla ya ocupa los números 1 a 149, primero borraremos el concierto 1
 
 - Respuesta `200` del estado de la API.
 - Listados y filtros de ambas colecciones.
+- Nota histórica con las tres fechas canceladas de Viena.
 - Respuestas `201` de las dos creaciones.
 - Respuestas `200` de las dos actualizaciones.
 - Error `409` al intentar borrar una canción relacionada.

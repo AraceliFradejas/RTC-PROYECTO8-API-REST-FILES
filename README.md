@@ -105,6 +105,12 @@ La aplicación distinguirá entre:
 
 Las actuaciones sorpresa se representarán de forma independiente para conservar el instrumento, el orden y las canciones que formaron cada mashup.
 
+### Nota histórica: las fechas canceladas de Viena
+
+Las actuaciones previstas para los días 8, 9 y 10 de agosto de 2024 en el Ernst-Happel-Stadion de Viena fueron canceladas por una amenaza de seguridad y se documentan mediante `GET /concerts/history/cancellations`. Se mantienen separadas de los 149 conciertos que sí llegaron a celebrarse.
+
+La nota recuerda también la respuesta de la comunidad: numerosos swifties se reunieron en las calles de Viena, especialmente en Corneliusgasse, para cantar y compartir pulseras de la amistad. El campo `communityImage` permanece vacío hasta localizar una fotografía con permiso o licencia de reutilización comprobable; las fotografías editoriales encontradas no se han copiado.
+
 ## Gestión de archivos con Cloudinary
 
 Las dos colecciones admitirán archivos subidos a Cloudinary:
@@ -144,6 +150,7 @@ URL base local: `http://localhost:5050/api`.
 | Método | Endpoint | Descripción |
 | --- | --- | --- |
 | GET | `/concerts` | Obtener todos los conciertos |
+| GET | `/concerts/history/cancellations` | Consultar las tres fechas canceladas de Viena |
 | GET | `/concerts/:id` | Obtener un concierto y sus canciones relacionadas |
 | POST | `/concerts` | Crear un concierto y subir su archivo |
 | PUT | `/concerts/:id` | Actualizar un concierto y, opcionalmente, su archivo |
@@ -287,6 +294,12 @@ Concert.surprisePerformances[].songs[] -> Song._id
 
 Concert queries will use `populate()` to return the related song information. Surprise performances will preserve their instrument, order and the individual songs included in each mashup.
 
+### Historical note: the cancelled Vienna dates
+
+The shows scheduled for August 8, 9 and 10, 2024 at Vienna's Ernst-Happel-Stadion were cancelled because of a security threat. They are available through `GET /concerts/history/cancellations` and remain separate from the 149 concerts that were performed.
+
+The note also records the community response: many swifties gathered in Vienna's streets, especially Corneliusgasse, to sing and exchange friendship bracelets. The `communityImage` field remains empty until a photograph with a verifiable reuse licence or permission is found; the editorial photographs located during research have not been copied.
+
 ## File management with Cloudinary
 
 Both collections will support file uploads:
@@ -324,6 +337,7 @@ Local base URL: `http://localhost:5050/api`.
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/concerts` | Retrieve all concerts |
+| GET | `/concerts/history/cancellations` | Retrieve the three cancelled Vienna dates |
 | GET | `/concerts/:id` | Retrieve a concert and its related songs |
 | POST | `/concerts` | Create a concert and upload its file |
 | PUT | `/concerts/:id` | Update a concert and optionally replace its file |

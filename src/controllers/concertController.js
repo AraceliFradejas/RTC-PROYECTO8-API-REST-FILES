@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { cancelledConcertData } from '../data/cancelledConcertData.js'
 import Concert from '../models/Concert.js'
 import Song from '../models/Song.js'
 import AppError from '../utils/AppError.js'
@@ -53,6 +54,15 @@ const validateSongReferences = async (regularSongs, surprisePerformances) => {
   if (existingSongs !== uniqueSongIds.length) {
     throw new AppError('One or more related songs do not exist', 400)
   }
+}
+
+export const getCancelledConcerts = (req, res) => {
+  res.status(200).json({
+    count: cancelledConcertData.length,
+    clarification:
+      'These scheduled dates are documented separately and are not part of the 149 concerts performed.',
+    events: cancelledConcertData
+  })
 }
 
 const parseConcertRelations = (body, currentConcert = null) => {
