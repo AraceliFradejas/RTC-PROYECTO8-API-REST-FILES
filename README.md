@@ -4,7 +4,7 @@ API REST dedicada a documentar los conciertos, repertorios y canciones sorpresa 
 
 Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO | API REST]** del máster **ROCK THE CODE** de **The Power Tech School**.
 
-> **Estado del proyecto:** primera fase de planificación y documentación. La arquitectura, los modelos y los endpoints descritos en este documento constituyen el diseño previsto y se implementarán progresivamente.
+> **Estado del proyecto:** backend en desarrollo. El servidor, las conexiones con MongoDB Atlas y Cloudinary, los modelos, ambos CRUD y la primera semilla de canciones ya están implementados. Continúa la recopilación contrastada de canciones sorpresa y conciertos.
 
 [English version](#english-version)
 
@@ -152,7 +152,13 @@ La documentación se ampliará durante el desarrollo con filtros, campos admitid
 
 ## Semilla y calidad de los datos
 
-La semilla se diseñará para cargar datos sin crear duplicados y validará, entre otros aspectos:
+El comando siguiente carga 55 canciones del repertorio habitual y sus principales variaciones:
+
+```bash
+npm run seed:songs
+```
+
+La semilla utiliza operaciones `upsert`, conserva las imágenes incorporadas mediante el CRUD y puede ejecutarse repetidamente sin crear ni modificar documentos cuando los datos ya están actualizados. Antes de conectarse valida, entre otros aspectos:
 
 - Títulos de canciones duplicados.
 - Fechas y números de concierto repetidos.
@@ -161,7 +167,7 @@ La semilla se diseñará para cargar datos sin crear duplicados y validará, ent
 - Diferencias entre los repertorios anteriores y posteriores a TTPD.
 - Estructura de las canciones sorpresa y sus mashups.
 
-El objetivo final es documentar los 149 conciertos de la gira de forma progresiva y contrastada.
+El catálogo se ampliará con las canciones sorpresa a medida que se contrasten los 149 conciertos. El objetivo final es documentar toda la gira de forma progresiva y verificable.
 
 ## Documentación y evidencias
 
@@ -223,7 +229,7 @@ The Eras Tour API REST Files is planned as a digital archive of the concerts per
 
 This API REST Files project is an assignment for **MODULE 5: BACKEND [NODE | MONGO | API REST]** of the **ROCK THE CODE** master's programme at **The Power Tech School**.
 
-> **Project status:** initial planning and documentation phase. The architecture, models and endpoints described below are the intended design and will be implemented progressively.
+> **Project status:** backend under development. The server, MongoDB Atlas and Cloudinary connections, models, both CRUD implementations and the initial song seed are complete. Cross-checking surprise songs and concerts remains in progress.
 
 The application will provide information about dates, cities, countries, venues, tour legs, regular setlists, surprise songs, instruments and mashups performed at each show.
 
@@ -319,9 +325,15 @@ The documentation will be expanded during development with filters, accepted fie
 
 ## Seed and data quality
 
-The seed will avoid duplicate records and validate song titles, concert dates, show numbers, relationships, required location data, setlist versions and surprise-song mashups.
+The following command loads 55 regular-setlist songs and principal variations:
 
-The final aim is to document all 149 tour concerts progressively using cross-checked sources.
+```bash
+npm run seed:songs
+```
+
+The seed uses `upsert` operations, preserves images added through the CRUD and can be run repeatedly without duplicating or modifying documents when the data is already current. It validates duplicate titles and model rules before connecting.
+
+The catalogue will be expanded with surprise songs while the 149 concerts are cross-checked. The final aim is to document the complete tour progressively using verifiable sources.
 
 ## Documentation and evidence
 
