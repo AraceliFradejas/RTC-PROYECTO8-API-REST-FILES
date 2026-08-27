@@ -83,10 +83,6 @@ MongoDB Atlas contiene las colecciones `songs` y `concerts`. Las capturas verifi
 
 ![Detalle de un concierto y sus relaciones](../screenshots/MongoAtlas4-ErasTourCluster-ConcertDetail.png)
 
-#### Concierto académico temporal
-
-![Concierto académico temporal](../screenshots/MongoAtlas5-ErasTourCluster-TestConcert149.png)
-
 #### Estado final: 149 conciertos y Vancouver restaurado
 
 ![Estado final: 149 conciertos y Vancouver restaurado](../screenshots/MongoAtlas6-ErasTourCluster-TestConcert149OK.png)
