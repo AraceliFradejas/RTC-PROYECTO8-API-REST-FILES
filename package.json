@@ -1,0 +1,29 @@
+{
+  "name": "rtc-proyecto8-api-rest-files",
+  "version": "1.0.0",
+  "description": "API REST Files dedicada a documentar los conciertos y canciones de The Eras Tour",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "cloudinary",
+    "api-rest",
+    "the-eras-tour"
+  ],
+  "author": "Araceli Fradejas Muñoz",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

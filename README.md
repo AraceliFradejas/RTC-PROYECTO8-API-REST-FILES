@@ -126,7 +126,7 @@ Las imágenes no se descargarán ni reutilizarán solamente por estar disponible
 
 ## Endpoints planificados
 
-URL base local prevista: `http://localhost:5000/api`.
+URL base local prevista: `http://localhost:5050/api`.
 
 ### Canciones
 
@@ -180,7 +180,7 @@ El proyecto incluirá una memoria académica con:
 El repositorio incluirá un archivo `.env.example` sin credenciales reales:
 
 ```env
-PORT=5000
+PORT=5050
 MONGODB_URI=mongodb+srv://...
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
@@ -293,7 +293,7 @@ Images will not be reused merely because they are available online. The project 
 
 ## Planned endpoints
 
-Planned local base URL: `http://localhost:5000/api`.
+Planned local base URL: `http://localhost:5050/api`.
 
 ### Songs
 
@@ -332,7 +332,7 @@ An academic report will document the architecture, technical decisions, data sou
 The repository will provide a `.env.example` file without real credentials:
 
 ```env
-PORT=5000
+PORT=5050
 MONGODB_URI=mongodb+srv://...
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
