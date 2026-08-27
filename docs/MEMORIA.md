@@ -228,10 +228,27 @@ Este procedimiento mantiene las validaciones de producción, evita números fict
 
 La restauración creó exclusivamente el documento que faltaba (`Concerts created: 1`, `Concerts updated: 0`). La ejecución quedó registrada en la [captura de la terminal](../screenshots/Terminal1-Restore-Concert149-Vancouver.png), y tanto Atlas como Insomnia confirmaron después la recuperación del concierto número 149.
 
-## 6. Seguridad
+## 6. Lo que he aprendido
+
+Además de completar los endpoints, durante el proyecto he entendido mejor para qué sirve cada parte y qué problemas resuelve:
+
+- `populate()` me permite guardar solo los identificadores de las canciones dentro de un concierto y, cuando hago una consulta, recibir también sus datos. Así no tengo que copiar la misma canción dentro de cada concierto y los cambios se mantienen en un único documento.
+- La relación entre conciertos y canciones es de muchos a muchos. Un concierto tiene varias canciones y una canción puede aparecer en muchos conciertos. Por eso `regularSongs` y las canciones de `surprisePerformances` son arrays de referencias a `Song`.
+- `bulkWrite` permite enviar varias operaciones a MongoDB en una sola llamada. En las semillas lo utilizo con `updateOne` y `upsert: true`: si encuentra la canción o el concierto, lo actualiza; si no lo encuentra, lo crea.
+- La semilla es idempotente porque usa una clave estable para localizar cada documento, como el título de una canción o el número de concierto. Al ejecutarla otra vez no crea copias ni cambia los datos que ya están correctos.
+- Multer recibe la imagen como un buffer en memoria antes de enviarla a Cloudinary. En este proyecto se limita el tamaño a 5 MB y se aceptan solo JPEG, PNG y WebP. No se guarda la imagen directamente en MongoDB.
+- La carpeta de Cloudinary se decide al llamar a la utilidad de subida. Se reutiliza la misma función y se le pasa `eras-tour/songs` o `eras-tour/concerts`, según el controlador que está trabajando.
+- Cuando sustituyo una imagen, primero se sube la nueva, se guarda su información en MongoDB y después se elimina la anterior. Cuando borro un documento, también se elimina su `public_id` de Cloudinary. Si falla la operación principal, el código intenta limpiar la imagen nueva para no dejar archivos sin relación.
+- Devuelvo `409 Conflict` al borrar una canción que todavía pertenece a un concierto porque el problema no es que la petición esté mal, sino que existe un conflicto con el estado actual de los datos. Primero hay que quitar la relación eliminando el concierto de prueba.
+- El repertorio cambió después de la publicación de TTPD. Por eso no traté todos los conciertos como si tuvieran exactamente el mismo setlist: guardo `pre-ttpd` y `post-ttpd`, además de las variaciones y canciones sorpresa de cada fecha.
+- El número de concierto 149 estaba ocupado por Vancouver y el modelo no permite repetirlo. Para probar el CRUD sin quitar esa validación, lo eliminé temporalmente porque no tenía imagen de Cloudinary, utilicé el número en el concierto de prueba y después ejecuté la semilla para restaurarlo.
+
+Estas decisiones me han ayudado a entender que una API no consiste solo en crear rutas. También hay que cuidar las relaciones, la consistencia de los datos, los archivos externos y la posibilidad de repetir una carga sin estropear lo que ya existe.
+
+## 7. Seguridad
 
 Las credenciales permanecen en `.env`, excluido del repositorio público. Las capturas no deben mostrar la URI privada de Atlas, contraseñas ni el API Secret de Cloudinary. El archivo `.env.example` solamente documenta los nombres de las variables necesarias.
 
-## 7. Aviso académico
+## 8. Aviso académico
 
 Proyecto independiente, no oficial y sin finalidad comercial, realizado desde el cariño, el respeto y la admiración de una swiftie por Taylor Swift y *The Eras Tour*. Los nombres, marcas y obras citados pertenecen a sus titulares. Los datos se emplean exclusivamente con fines formativos y se acompañan de sus fuentes.

@@ -84,7 +84,7 @@ Ejemplo opcional de `attendance`:
 {"value":70000,"type":"reported","source":{"label":"Fuente de prueba","url":"https://example.com/source","accessedAt":"2026-08-27"}}
 ```
 
-Como la semilla ya ocupa los números 1 a 149, primero borraremos el concierto 149, que no tiene una imagen de Cloudinary, y reutilizaremos ese número para el documento temporal. Tras borrar la prueba, restauraremos el concierto original con `npm run seed:concerts`. Lo haremos juntas y copiaremos previamente los identificadores necesarios.
+Como la semilla ya ocupa los números 1 a 149, primero borraremos el concierto 149, que no tiene una imagen de Cloudinary, y reutilizaremos ese número para el documento temporal. Tras borrar la prueba, restauraremos el concierto original con `npm run seed:concerts`. Antes de comenzar, se copiarán los identificadores necesarios.
 
 ## 5. Capturas que debemos conservar
 
