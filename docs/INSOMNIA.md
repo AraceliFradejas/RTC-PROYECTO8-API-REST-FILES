@@ -61,6 +61,7 @@ Antes de crear un concierto, copia al menos un `_id` obtenido mediante `GET /son
 | `openingActs` | Text | `["Test Artist"]` |
 | `showNumber` | Text | Un número libre entre 1 y 149 |
 | `setlistVersion` | Text | `post-ttpd` |
+| `attendance` | Text | Objeto JSON o `null` |
 | `regularSongs` | Text | `["ID_DE_UNA_CANCION"]` |
 | `surprisePerformances` | Text | Ver ejemplo inferior |
 | `image` | File | Imagen de prueba con uso permitido |
@@ -72,6 +73,12 @@ Ejemplo de `surprisePerformances` en una sola línea:
 
 ```json
 [{"order":1,"instrument":"guitar","songs":["ID_DE_UNA_CANCION"],"guests":[],"notes":null}]
+```
+
+Ejemplo opcional de `attendance`:
+
+```json
+{"value":70000,"type":"reported","source":{"label":"Fuente de prueba","url":"https://example.com/source","accessedAt":"2026-08-27"}}
 ```
 
 Como la semilla ya ocupa los números 1 a 149, primero borraremos el concierto 149, que no tiene una imagen de Cloudinary, y reutilizaremos ese número para el documento temporal. Tras borrar la prueba, restauraremos el concierto original con `npm run seed:concerts`. Lo haremos juntas y copiaremos previamente los identificadores necesarios.

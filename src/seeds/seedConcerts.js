@@ -15,6 +15,25 @@ const floridaDates = new Set([
   '2024-10-20'
 ])
 
+const attendanceSource = {
+  label: 'Wikipedia - The Eras Tour: venue attendance records',
+  url: 'https://en.wikipedia.org/wiki/The_Eras_Tour#Venue_records',
+  accessedAt: new Date('2026-08-27')
+}
+
+const attendanceByDate = new Map([
+  ['2023-05-07', 71000],
+  ['2023-06-17', 73117],
+  ['2023-07-22', 72171],
+  ['2024-03-09', 63000],
+  ['2024-05-17', 60243]
+])
+
+const getAttendance = (date) => {
+  const value = attendanceByDate.get(date)
+  return value ? { value, type: 'reported', source: attendanceSource } : null
+}
+
 const normalizeTitle = (title) => title.trim().toLocaleLowerCase('en')
 
 const getTourLeg = (country) => {
@@ -87,6 +106,9 @@ const buildConcert = (concert, index, songsByTitle) => ({
   openingActs: concert.openingActs,
   showNumber: index + 1,
   setlistVersion: concert.date >= ttpdPremiereDate ? 'post-ttpd' : 'pre-ttpd',
+  ...(getAttendance(concert.date) && {
+    attendance: getAttendance(concert.date)
+  }),
   regularSongs: resolveSongIds(getRegularSetlist(concert), songsByTitle),
   surprisePerformances: concert.surprisePerformances.map((performance) => ({
     order: performance.order,

@@ -21,8 +21,11 @@ La aplicación separa responsabilidades en configuración, modelos, controladore
 - Variaciones concretas y mashups conservados por fecha, instrumento y orden.
 - Semillas idempotentes basadas en `upsert`.
 - Tres fechas canceladas en Viena documentadas aparte, sin alterar el total de conciertos realizados.
+- Asistencia individual opcional, diferenciando cifras comunicadas y estimaciones con su fuente.
 
 La segunda ejecución verificada de ambas semillas produjo 0 creaciones y 0 actualizaciones, por lo que no genera duplicados cuando los datos ya están sincronizados.
+
+La asistencia se incorpora únicamente cuando una fuente identifica una noche concreta. No se utiliza la capacidad del recinto y tampoco se dividen los totales de varias noches, ya que hacerlo produciría cifras no publicadas. Los conciertos sin información individual fiable mantienen `attendance: null`.
 
 ### Nota histórica de Viena
 

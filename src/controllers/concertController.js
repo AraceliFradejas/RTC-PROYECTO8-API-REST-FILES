@@ -174,6 +174,7 @@ export const createConcert = async (req, res, next) => {
       openingActs,
       showNumber: req.body.showNumber,
       setlistVersion: req.body.setlistVersion,
+      attendance: parseJsonField(req.body.attendance, 'attendance', null),
       regularSongs,
       surprisePerformances,
       image: buildImageMetadata(req.body, uploadedImage),
@@ -229,6 +230,14 @@ export const updateConcert = async (req, res, next) => {
 
     if (req.body.sources !== undefined) {
       concert.sources = parseJsonField(req.body.sources, 'sources', [])
+    }
+
+    if (req.body.attendance !== undefined) {
+      concert.attendance = parseJsonField(
+        req.body.attendance,
+        'attendance',
+        null
+      )
     }
 
     if (req.body.openingActs !== undefined) {

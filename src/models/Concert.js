@@ -39,6 +39,26 @@ const surprisePerformanceSchema = new mongoose.Schema(
   { _id: false }
 )
 
+const attendanceSchema = new mongoose.Schema(
+  {
+    value: {
+      type: Number,
+      required: true,
+      min: 1
+    },
+    type: {
+      type: String,
+      required: true,
+      enum: ['reported', 'estimated']
+    },
+    source: {
+      type: sourceSchema,
+      required: true
+    }
+  },
+  { _id: false }
+)
+
 const concertSchema = new mongoose.Schema(
   {
     city: {
@@ -81,6 +101,10 @@ const concertSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['pre-ttpd', 'post-ttpd']
+    },
+    attendance: {
+      type: attendanceSchema,
+      default: null
     },
     regularSongs: {
       type: [

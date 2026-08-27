@@ -61,6 +61,7 @@ Cada documento representará uno de los conciertos de la gira.
 | `openingActs` | Artistas de apertura |
 | `showNumber` | Número de concierto |
 | `setlistVersion` | Versión del espectáculo anterior o posterior a TTPD |
+| `attendance` | Asistencia individual documentada, tipo de dato y fuente |
 | `regularSongs` | Referencias a las canciones del repertorio habitual |
 | `surprisePerformances` | Actuaciones sorpresa, instrumento y posibles mashups |
 | `image` | URL, identificador de Cloudinary y datos de atribución |
@@ -104,6 +105,10 @@ La aplicación distinguirá entre:
 - Las variaciones, colaboraciones y actuaciones excepcionales.
 
 Las actuaciones sorpresa se representarán de forma independiente para conservar el instrumento, el orden y las canciones que formaron cada mashup.
+
+### Asistencia
+
+`attendance` es opcional y solo se completa cuando existe una cifra correspondiente a una noche concreta. Distingue datos comunicados (`reported`) de estimaciones (`estimated`) y siempre incluye su fuente. Los totales de varias noches y la capacidad del estadio no se reparten ni se presentan como asistencia individual. Una nueva ejecución de la semilla conserva los datos añadidos posteriormente a otros conciertos.
 
 ### Nota histórica: las fechas canceladas de Viena
 
@@ -293,6 +298,10 @@ Concert.surprisePerformances[].songs[] -> Song._id
 ```
 
 Concert queries will use `populate()` to return the related song information. Surprise performances will preserve their instrument, order and the individual songs included in each mashup.
+
+### Attendance
+
+`attendance` is optional and is only populated when a figure for one specific show is available. It distinguishes reported figures from estimates and always includes its source. Multi-night totals and stadium capacity are never divided or presented as individual attendance. Running the seed again preserves attendance added later to other concerts.
 
 ### Historical note: the cancelled Vienna dates
 

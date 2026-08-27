@@ -235,6 +235,10 @@ components:
           items: { type: string }
         showNumber: { type: integer, minimum: 1, maximum: 149 }
         setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+        attendance:
+          allOf:
+            - $ref: '#/components/schemas/Attendance'
+          nullable: true
         regularSongs:
           type: array
           items: { $ref: '#/components/schemas/Song' }
@@ -266,6 +270,13 @@ components:
         sources:
           type: array
           items: { $ref: '#/components/schemas/Source' }
+    Attendance:
+      type: object
+      required: [value, type, source]
+      properties:
+        value: { type: integer, minimum: 1, example: 73117 }
+        type: { type: string, enum: [reported, estimated] }
+        source: { $ref: '#/components/schemas/Source' }
     FileMetadataFields:
       type: object
       properties:
@@ -322,6 +333,7 @@ components:
             tourLeg: { type: string }
             showNumber: { type: integer }
             setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+            attendance: { type: string, description: Objeto JSON serializado }
             openingActs: { type: string, description: Array JSON serializado }
             regularSongs: { type: string, description: Array JSON de ObjectId }
             surprisePerformances: { type: string, description: Array JSON }
@@ -338,6 +350,7 @@ components:
             tourLeg: { type: string }
             showNumber: { type: integer }
             setlistVersion: { type: string, enum: [pre-ttpd, post-ttpd] }
+            attendance: { type: string, description: Objeto JSON serializado o null }
             openingActs: { type: string, description: Array JSON serializado }
             regularSongs: { type: string, description: Array JSON de ObjectId }
             surprisePerformances: { type: string, description: Array JSON }
