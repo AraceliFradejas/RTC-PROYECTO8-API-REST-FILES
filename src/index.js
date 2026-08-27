@@ -4,6 +4,7 @@ import express from 'express'
 import { configureCloudinary } from './config/cloudinary.js'
 import { connectDatabase } from './config/database.js'
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js'
+import concertRouter from './routes/concertRoutes.js'
 import songRouter from './routes/songRoutes.js'
 
 const app = express()
@@ -19,6 +20,7 @@ app.get('/api', (req, res) => {
 })
 
 app.use('/api/songs', songRouter)
+app.use('/api/concerts', concertRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
