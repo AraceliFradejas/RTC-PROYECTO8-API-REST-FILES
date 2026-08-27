@@ -43,6 +43,22 @@ Multer recibe los archivos en memoria y la utilidad compartida los sube a Cloudi
 
 Cada documento conserva la URL segura, el `public_id`, el texto alternativo y los datos opcionales de procedencia, autoría y licencia. Al sustituir o borrar una imagen, la aplicación elimina de Cloudinary el recurso que deja de utilizarse. También intenta limpiar una subida nueva si la operación de MongoDB falla.
 
+### 4.1 Galería de archivos utilizados
+
+Estas son las cuatro fotografías reales empleadas durante las pruebas. Se descargaron en un tamaño reducido desde Wikimedia Commons y se enviaron a Cloudinary mediante Insomnia. Sus créditos completos se conservan en [`photos/README.md`](../photos/README.md).
+
+| folklore — Inglewood | reputation — Inglewood |
+| :---: | :---: |
+| ![Taylor Swift durante el set de folklore en Inglewood](../photos/eras-tour-folklore-paolo-v.jpg) | ![Taylor Swift durante el set de reputation en Inglewood](../photos/eras-tour-reputation-paolo-v.jpg) |
+| Paolo V · CC BY 2.0 | Paolo V · CC BY 2.0 |
+
+| TTPD — París | 1989 — Londres |
+| :---: | :---: |
+| ![Taylor Swift durante el set de TTPD en París](../photos/eras-tour-ttpd-paris-vixy13.jpg) | ![Vista del set de 1989 en Londres](../photos/eras-tour-1989-london-brigidlis.jpg) |
+| Vixy13 · CC BY 4.0 | BrigidLIS · CC BY 4.0 |
+
+Las imágenes de folklore y reputation permitieron comprobar el `POST` y el `PUT` de canciones. Las fotografías de Londres y París hicieron lo mismo para conciertos. Después se verificó que las primeras imágenes desaparecían al ser sustituidas y que las segundas se eliminaban al borrar los documentos temporales.
+
 ## 5. Pruebas y evidencias
 
 Las pruebas se realizaron siguiendo el orden documentado en [`INSOMNIA.md`](INSOMNIA.md). Las evidencias muestran el comportamiento real de la aplicación y evitan exponer credenciales o secretos.
@@ -51,64 +67,157 @@ Las pruebas se realizaron siguiendo el orden documentado en [`INSOMNIA.md`](INSO
 
 MongoDB Atlas contiene las colecciones `songs` y `concerts`. Las capturas verifican la conexión, los 238 documentos de canciones, los 149 conciertos y las relaciones almacenadas mediante `ObjectId`.
 
-- [Vista general del proyecto en Atlas](../screenshots/MongoAtlas1-RTC-PROYECTO8-API-REST%20Overview.png)
-- [Clúster y colecciones](../screenshots/MongoAtlas2-ErasTourCluster.png)
-- [Detalle de la colección de canciones](../screenshots/MongoAtlas3-ErasTourCluster-SongsDetail.png)
-- [Detalle de un concierto y sus relaciones](../screenshots/MongoAtlas4-ErasTourCluster-ConcertDetail.png)
-- [Concierto académico temporal](../screenshots/MongoAtlas5-ErasTourCluster-TestConcert149.png)
-- [Estado final: 149 conciertos y Vancouver restaurado](../screenshots/MongoAtlas6-ErasTourCluster-TestConcert149OK.png)
+#### Vista general del proyecto en Atlas
 
-![Estado final de la colección de conciertos en MongoDB Atlas](../screenshots/MongoAtlas6-ErasTourCluster-TestConcert149OK.png)
+![Vista general del proyecto en Atlas](../screenshots/MongoAtlas1-RTC-PROYECTO8-API-REST%20Overview.png)
+
+#### Clúster y colecciones
+
+![Clúster y colecciones](../screenshots/MongoAtlas2-ErasTourCluster.png)
+
+#### Detalle de la colección de canciones
+
+![Detalle de la colección de canciones](../screenshots/MongoAtlas3-ErasTourCluster-SongsDetail.png)
+
+#### Detalle de un concierto y sus relaciones
+
+![Detalle de un concierto y sus relaciones](../screenshots/MongoAtlas4-ErasTourCluster-ConcertDetail.png)
+
+#### Concierto académico temporal
+
+![Concierto académico temporal](../screenshots/MongoAtlas5-ErasTourCluster-TestConcert149.png)
+
+#### Estado final: 149 conciertos y Vancouver restaurado
+
+![Estado final: 149 conciertos y Vancouver restaurado](../screenshots/MongoAtlas6-ErasTourCluster-TestConcert149OK.png)
 
 ### 5.2 Cloudinary
 
 Se verificó la subida de imágenes a carpetas diferentes reutilizando el mismo almacenamiento, la sustitución de archivos y la eliminación de aquellos que dejaron de estar asociados a MongoDB.
 
-- [URL de la primera imagen de canción](../screenshots/Cloudinary1_urlPhoto.png)
-- [Primera imagen almacenada en Cloudinary](../screenshots/Cloudinary2_PhotoInCloudinaryApp.png)
-- [URL obtenida tras sustituir la imagen](../screenshots/Cloudinary3_urlReplacePhoto.png)
-- [Nueva imagen de canción en Cloudinary](../screenshots/Cloudinary4_ReplacePhotoinCloudinaryApp.png)
-- [Carpeta `eras-tour/songs`](../screenshots/Cloudinary5_-CloudinaryAppSongsFolder.png)
-- [Carpeta `eras-tour/concerts`](../screenshots/Cloudinary6_-CloudinaryAppConcertsFolder.png)
-- [Detalle de la imagen inicial del concierto](../screenshots/Cloudinary7_-CloudinaryAppConcertsPhotoDetails.png)
-- [Imagen sustituta del concierto](../screenshots/Cloudinary8_-CloudinaryAppConcertsNewPhotoUp.png)
-- [Metadatos de la imagen sustituta](../screenshots/Cloudinary9_-CloudinaryAppConcertsNewPhotoDetails.png)
-- [Imagen temporal del concierto eliminada](../screenshots/Cloudinary10_TemporaryConcertEliminated.png)
-- [Imagen temporal de la canción eliminada](../screenshots/Cloudinary11_TemporarySongEliminated.png)
+#### URL de la primera imagen de canción
 
-![Cloudinary sin la imagen de la canción temporal eliminada](../screenshots/Cloudinary11_TemporarySongEliminated.png)
+![URL de la primera imagen de canción](../screenshots/Cloudinary1_urlPhoto.png)
+
+#### Primera imagen almacenada en Cloudinary
+
+![Primera imagen almacenada en Cloudinary](../screenshots/Cloudinary2_PhotoInCloudinaryApp.png)
+
+#### URL obtenida tras sustituir la imagen
+
+![URL obtenida tras sustituir la imagen](../screenshots/Cloudinary3_urlReplacePhoto.png)
+
+#### Nueva imagen de canción en Cloudinary
+
+![Nueva imagen de canción en Cloudinary](../screenshots/Cloudinary4_ReplacePhotoinCloudinaryApp.png)
+
+#### Carpeta `eras-tour/songs`
+
+![Carpeta `eras-tour/songs`](../screenshots/Cloudinary5_-CloudinaryAppSongsFolder.png)
+
+#### Carpeta `eras-tour/concerts`
+
+![Carpeta `eras-tour/concerts`](../screenshots/Cloudinary6_-CloudinaryAppConcertsFolder.png)
+
+#### Detalle de la imagen inicial del concierto
+
+![Detalle de la imagen inicial del concierto](../screenshots/Cloudinary7_-CloudinaryAppConcertsPhotoDetails.png)
+
+#### Imagen sustituta del concierto
+
+![Imagen sustituta del concierto](../screenshots/Cloudinary8_-CloudinaryAppConcertsNewPhotoUp.png)
+
+#### Metadatos de la imagen sustituta
+
+![Metadatos de la imagen sustituta](../screenshots/Cloudinary9_-CloudinaryAppConcertsNewPhotoDetails.png)
+
+#### Imagen temporal del concierto eliminada
+
+![Imagen temporal del concierto eliminada](../screenshots/Cloudinary10_TemporaryConcertEliminated.png)
+
+#### Imagen temporal de la canción eliminada
+
+![Imagen temporal de la canción eliminada](../screenshots/Cloudinary11_TemporarySongEliminated.png)
 
 ### 5.3 Insomnia
 
 La colección importada en Insomnia permitió comprobar el estado de la API, las consultas, los filtros, los dos CRUD completos, la carga de archivos y los errores controlados.
 
-- [API en funcionamiento](../screenshots/Insomnia1_TheErasTourAPI.png)
-- [Filtro de canciones: `cardigan`](../screenshots/Insomnia2-Songs-Filter-Cardigan.png)
-- [Canción obtenida por identificador](../screenshots/Insomnia3-Song-ById.png)
-- [Concierto de Madrid del 29 de mayo](../screenshots/Insomnia4-Concerts-Filter-Madrid29052024.png)
-- [Concierto de Madrid del 30 de mayo](../screenshots/Insomnia5-Concerts-Filter-Madrid30052024.png)
-- [Tres fechas canceladas de Viena](../screenshots/Insomnia6-Concerts-Vienna-Cancellations.png)
-- [Concierto de Madrid por identificador](../screenshots/Insomnia7-Concert-ById-Madrid.png)
-- [Creación de una canción con imagen](../screenshots/Insomnia8-Song-POST-Cloudinary.png)
-- [Actualización y sustitución de su imagen](../screenshots/Insomnia9-Song-PUT-Replace-Image.png)
-- [Localización del concierto 149](../screenshots/Insomnia10_Vancouver149.png)
-- [Eliminación temporal del concierto original](../screenshots/Insomnia11-Concert149-Temporary-DELETE.png)
-- [Creación de un concierto con relación e imagen](../screenshots/Insomnia12-Concert-POST-Relation-Cloudinary.png)
-- [Actualización y sustitución de la imagen del concierto](../screenshots/Insomnia13-Concert-PUT-Replace-Image.png)
-- [Respuesta `409` al intentar borrar una canción relacionada](../screenshots/Insomnia14-Song-DELETE-409-Related.png)
-- [Eliminación del concierto académico](../screenshots/Insomnia15_TemporaryConcertEliminated.png)
-- [Eliminación posterior de la canción académica](../screenshots/Insomnia16_TemporarySongEliminated.png)
-- [Concierto 149 de Vancouver restaurado](../screenshots/Insomnia17-Vancouver149-RestoredOK.png)
+#### API en funcionamiento
+
+![API en funcionamiento](../screenshots/Insomnia1_TheErasTourAPI.png)
+
+#### Filtro de canciones: `cardigan`
+
+![Filtro de canciones: `cardigan`](../screenshots/Insomnia2-Songs-Filter-Cardigan.png)
+
+#### Canción obtenida por identificador
+
+![Canción obtenida por identificador](../screenshots/Insomnia3-Song-ById.png)
+
+#### Concierto de Madrid del 29 de mayo
+
+![Concierto de Madrid del 29 de mayo](../screenshots/Insomnia4-Concerts-Filter-Madrid29052024.png)
+
+#### Concierto de Madrid del 30 de mayo
+
+![Concierto de Madrid del 30 de mayo](../screenshots/Insomnia5-Concerts-Filter-Madrid30052024.png)
+
+#### Tres fechas canceladas de Viena
+
+![Tres fechas canceladas de Viena](../screenshots/Insomnia6-Concerts-Vienna-Cancellations.png)
+
+#### Concierto de Madrid por identificador
+
+![Concierto de Madrid por identificador](../screenshots/Insomnia7-Concert-ById-Madrid.png)
+
+#### Creación de una canción con imagen
+
+![Creación de una canción con imagen](../screenshots/Insomnia8-Song-POST-Cloudinary.png)
+
+#### Actualización y sustitución de su imagen
+
+![Actualización y sustitución de su imagen](../screenshots/Insomnia9-Song-PUT-Replace-Image.png)
+
+#### Localización del concierto 149
+
+![Localización del concierto 149](../screenshots/Insomnia10_Vancouver149.png)
+
+#### Eliminación temporal del concierto original
+
+![Eliminación temporal del concierto original](../screenshots/Insomnia11-Concert149-Temporary-DELETE.png)
+
+#### Creación de un concierto con relación e imagen
+
+![Creación de un concierto con relación e imagen](../screenshots/Insomnia12-Concert-POST-Relation-Cloudinary.png)
+
+#### Actualización y sustitución de la imagen del concierto
+
+![Actualización y sustitución de la imagen del concierto](../screenshots/Insomnia13-Concert-PUT-Replace-Image.png)
+
+#### Respuesta `409` al intentar borrar una canción relacionada
+
+![Respuesta `409` al intentar borrar una canción relacionada](../screenshots/Insomnia14-Song-DELETE-409-Related.png)
+
+#### Eliminación del concierto académico
+
+![Eliminación del concierto académico](../screenshots/Insomnia15_TemporaryConcertEliminated.png)
+
+#### Eliminación posterior de la canción académica
+
+![Eliminación posterior de la canción académica](../screenshots/Insomnia16_TemporarySongEliminated.png)
+
+#### Concierto 149 de Vancouver restaurado
+
+![Concierto 149 de Vancouver restaurado](../screenshots/Insomnia17-Vancouver149-RestoredOK.png)
 
 El intento de borrar primero la canción temporal produjo un error `409 Conflict`, ya que todavía estaba relacionada con el concierto académico. Tras eliminar ese concierto, la canción pudo borrarse correctamente. De este modo se comprobó que la API protege la integridad de las relaciones.
-
-![Concierto 149 de Vancouver restaurado y consultado por su identificador](../screenshots/Insomnia17-Vancouver149-RestoredOK.png)
 
 ### 5.4 Estrategia para probar el CRUD de conciertos
 
 El modelo protege `showNumber` con un índice único y limita sus valores al intervalo 1–149, porque la gira tuvo exactamente 149 conciertos realizados. La semilla ocupa todos esos números, por lo que crear un documento temporal sin preparación produciría correctamente un conflicto de unicidad.
 
-Para probar el `POST`, `PUT` y `DELETE` de conciertos sin relajar las reglas del modelo se seguirá este procedimiento controlado:
+Para probar el `POST`, `PUT` y `DELETE` de conciertos sin relajar las reglas del modelo se siguió este procedimiento controlado:
 
 1. Localizar mediante `GET /concerts?city=Vancouver` el concierto 149, celebrado el 8 de diciembre de 2024.
 2. Confirmar que el documento no tiene una imagen asociada en Cloudinary.

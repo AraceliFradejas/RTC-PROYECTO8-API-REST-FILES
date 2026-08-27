@@ -4,7 +4,9 @@ API REST dedicada a documentar los conciertos, repertorios y canciones sorpresa 
 
 Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO | API REST]** del máster **ROCK THE CODE** de **The Power Tech School**.
 
-> **Estado del proyecto:** backend implementado. MongoDB Atlas contiene 238 canciones y los 149 conciertos de la gira, con repertorios y canciones sorpresa relacionados. Quedan las pruebas multipart finales y la recopilación de evidencias.
+> **Estado del proyecto:** terminado y verificado. MongoDB Atlas contiene 238 canciones y los 149 conciertos de la gira, con repertorios y canciones sorpresa relacionados. El CRUD, las relaciones y el ciclo completo de archivos en Cloudinary están documentados con evidencias reales.
+
+[Memoria y evidencias completas](docs/MEMORIA.md) · [Colección OpenAPI para Insomnia](docs/openapi.yaml)
 
 [English version](#english-version)
 
@@ -12,13 +14,13 @@ Proyecto de API REST Files como entrega del **MÓDULO 5: BACKEND [NODE | MONGO |
 
 ## Descripción
 
-The Eras Tour API REST Files será un archivo digital de los conciertos realizados durante *The Eras Tour*. La aplicación permitirá consultar las fechas, ciudades, países, recintos, etapas de la gira, repertorios habituales, canciones sorpresa, instrumentos y mashups interpretados en cada concierto.
+The Eras Tour API REST Files es un archivo digital de los conciertos realizados durante *The Eras Tour*. La aplicación permite consultar las fechas, ciudades, países, recintos, etapas de la gira, repertorios habituales, canciones sorpresa, instrumentos y mashups interpretados en cada concierto.
 
 La temática nace de una motivación personal: no pude asistir al concierto de Madrid pese a intentar comprar las entradas desde el primer día. Este proyecto es una forma de recorrer, estudiar y disfrutar *The Eras Tour* a través del aprendizaje de desarrollo backend.
 
 ## Objetivos académicos
 
-El proyecto se desarrollará con los siguientes objetivos:
+El proyecto se ha desarrollado con los siguientes objetivos:
 
 - Crear un servidor con Express.
 - Conectar la aplicación con MongoDB Atlas mediante Mongoose.
@@ -45,11 +47,11 @@ El proyecto se desarrollará con los siguientes objetivos:
 
 ## Modelos y relaciones
 
-La API tendrá dos colecciones principales: `Concert` y `Song`.
+La API tiene dos colecciones principales: `Concert` y `Song`.
 
 ### Concert
 
-Cada documento representará uno de los conciertos de la gira.
+Cada documento representa uno de los conciertos de la gira.
 
 | Campo | Descripción |
 | --- | --- |
@@ -70,7 +72,7 @@ Cada documento representará uno de los conciertos de la gira.
 
 ### Song
 
-Cada documento representará una canción interpretada durante la gira.
+Cada documento representa una canción interpretada durante la gira.
 
 | Campo | Descripción |
 | --- | --- |
@@ -87,7 +89,7 @@ Cada documento representará una canción interpretada durante la gira.
 
 ### Relación entre colecciones
 
-Un concierto contiene numerosas canciones y una misma canción puede aparecer en muchos conciertos. La relación será de muchos a muchos mediante referencias de Mongoose:
+Un concierto contiene numerosas canciones y una misma canción puede aparecer en muchos conciertos. La relación es de muchos a muchos mediante referencias de Mongoose:
 
 ```text
 Concert.regularSongs[]                 -> Song._id
@@ -111,7 +113,7 @@ La aplicación distinguirá entre:
 - Las canciones sorpresa individuales y los mashups.
 - Las variaciones, colaboraciones y actuaciones excepcionales.
 
-Las actuaciones sorpresa se representarán de forma independiente para conservar el instrumento, el orden y las canciones que formaron cada mashup.
+Las actuaciones sorpresa se representan de forma independiente para conservar el instrumento, el orden y las canciones que formaron cada mashup.
 
 ### Asistencia
 
@@ -125,7 +127,7 @@ La nota recuerda también la respuesta de la comunidad: numerosos swifties se re
 
 ## Gestión de archivos con Cloudinary
 
-Las dos colecciones admitirán archivos subidos a Cloudinary:
+Las dos colecciones admiten archivos subidos a Cloudinary:
 
 - Los conciertos utilizarán la carpeta `eras-tour/concerts`.
 - Las canciones utilizarán la carpeta `eras-tour/songs`.
@@ -135,11 +137,47 @@ Las dos colecciones admitirán archivos subidos a Cloudinary:
 - Al borrar un documento se eliminará también su archivo de Cloudinary.
 - Si una operación falla después de subir un archivo, se intentará retirar el archivo nuevo para evitar recursos huérfanos.
 
+### Fotografías utilizadas en las pruebas
+
+Las siguientes imágenes reales de *The Eras Tour* se utilizaron para comprobar la subida y sustitución de archivos en las carpetas `eras-tour/songs` y `eras-tour/concerts`. Todas proceden de Wikimedia Commons y permiten su reutilización con atribución. Los créditos completos y los enlaces a los originales están disponibles en [`photos/README.md`](photos/README.md).
+
+| folklore — Inglewood | reputation — Inglewood |
+| :---: | :---: |
+| ![Taylor Swift durante el set de folklore en Inglewood](photos/eras-tour-folklore-paolo-v.jpg) | ![Taylor Swift durante el set de reputation en Inglewood](photos/eras-tour-reputation-paolo-v.jpg) |
+| Paolo V · CC BY 2.0 | Paolo V · CC BY 2.0 |
+
+| TTPD — París | 1989 — Londres |
+| :---: | :---: |
+| ![Taylor Swift durante el set de TTPD en París](photos/eras-tour-ttpd-paris-vixy13.jpg) | ![Vista del set de 1989 en Londres](photos/eras-tour-1989-london-brigidlis.jpg) |
+| Vixy13 · CC BY 4.0 | BrigidLIS · CC BY 4.0 |
+
+### Evidencias destacadas
+
+#### Subida y sustitución de una imagen de canción
+
+![Canción temporal creada con una fotografía subida a Cloudinary](screenshots/Insomnia8-Song-POST-Cloudinary.png)
+
+![Fotografía sustituta almacenada en la carpeta de canciones](screenshots/Cloudinary4_ReplacePhotoinCloudinaryApp.png)
+
+#### Relación entre concierto y canción con archivo
+
+![Concierto temporal creado con una canción relacionada y una imagen](screenshots/Insomnia12-Concert-POST-Relation-Cloudinary.png)
+
+![Fotografía del concierto almacenada en la carpeta independiente de Cloudinary](screenshots/Cloudinary7_-CloudinaryAppConcertsPhotoDetails.png)
+
+#### Limpieza de Cloudinary
+
+![Carpeta de conciertos después de eliminar la imagen temporal](screenshots/Cloudinary10_TemporaryConcertEliminated.png)
+
+![Carpeta de canciones después de eliminar la imagen temporal](screenshots/Cloudinary11_TemporarySongEliminated.png)
+
+El recorrido completo, incluidas las 35 capturas de MongoDB Atlas, Cloudinary, Insomnia y la restauración de los datos originales, se encuentra en la [memoria del proyecto](docs/MEMORIA.md#5-pruebas-y-evidencias).
+
 ## Fuentes, imágenes y trazabilidad
 
-La información de los conciertos se contrastará mediante fuentes públicas como la web oficial de Taylor Swift, Setlist.fm, publicaciones musicales, medios periodísticos y otras referencias especializadas.
+La información de los conciertos se ha contrastado mediante fuentes públicas como la web oficial de Taylor Swift, Setlist.fm, publicaciones musicales, medios periodísticos y otras referencias especializadas.
 
-Cada concierto podrá almacenar los enlaces consultados y la fecha de acceso. Los foros y las comunidades de seguidores podrán utilizarse para localizar información, pero los datos dudosos se contrastarán con fuentes adicionales.
+Cada concierto puede almacenar los enlaces consultados y la fecha de acceso. Los foros y las comunidades de seguidores pueden utilizarse para localizar información, pero los datos dudosos se contrastan con fuentes adicionales.
 
 Las imágenes no se descargarán ni reutilizarán solamente por estar disponibles en Internet. Se emplearán fotografías propias, recursos con una licencia compatible o imágenes cuya reutilización esté expresamente permitida. Cuando corresponda, se almacenarán y documentarán la autoría, la fuente y la licencia.
 
@@ -168,7 +206,7 @@ URL base local: `http://localhost:5050/api`.
 | PUT | `/concerts/:id` | Actualizar un concierto y, opcionalmente, su archivo |
 | DELETE | `/concerts/:id` | Eliminar un concierto y su archivo de Cloudinary |
 
-La documentación se ampliará durante el desarrollo con filtros, campos admitidos, ejemplos de peticiones, respuestas, validaciones y códigos de estado.
+La especificación OpenAPI y la guía de Insomnia documentan los filtros, campos admitidos, ejemplos, validaciones y códigos de estado utilizados en las pruebas.
 
 ## Semillas y calidad de los datos
 
@@ -199,7 +237,7 @@ La semilla diferencia los repertorios anteriores y posteriores a TTPD e incorpor
 
 ## Documentación y evidencias
 
-El proyecto incluirá una memoria académica con:
+El proyecto incluye una memoria académica con:
 
 - Explicación de la arquitectura y las decisiones técnicas.
 - Metodología y fuentes de los datos.
@@ -253,19 +291,19 @@ Proyecto realizado para The Power Tech School, máster Rock The Code.
 
 ## Description
 
-The Eras Tour API REST Files is planned as a digital archive of the concerts performed during Taylor Swift's *The Eras Tour*.
+The Eras Tour API REST Files is a digital archive of the concerts performed during Taylor Swift's *The Eras Tour*.
 
 This API REST Files project is an assignment for **MODULE 5: BACKEND [NODE | MONGO | API REST]** of the **ROCK THE CODE** master's programme at **The Power Tech School**.
 
-> **Project status:** backend implemented. MongoDB Atlas contains 238 songs and all 149 tour concerts, with related setlists and surprise songs. Final multipart tests and visual evidence remain to be completed.
+> **Project status:** completed and verified. MongoDB Atlas contains 238 songs and all 149 tour concerts, with related setlists and surprise songs. The CRUD operations, relationships and complete Cloudinary file lifecycle are documented with real evidence.
 
-The application will provide information about dates, cities, countries, venues, tour legs, regular setlists, surprise songs, instruments and mashups performed at each show.
+The application provides information about dates, cities, countries, venues, tour legs, regular setlists, surprise songs, instruments and mashups performed at each show.
 
 The subject has a personal motivation: I was unable to attend the Madrid concert despite trying to purchase tickets from the first day. This project is a way to explore, study and enjoy *The Eras Tour* through the process of learning backend development.
 
 ## Academic goals
 
-The project will:
+The project:
 
 - Create an Express server.
 - Connect to MongoDB Atlas through Mongoose.
@@ -292,19 +330,19 @@ The project will:
 
 ## Data models and relationship
 
-The API will contain two main collections:
+The API contains two main collections:
 
-- `Concert`: each document will represent a tour show, its location, date, setlist version, regular songs, surprise performances, image and sources.
-- `Song`: each document will represent a song, its album, era, release year, image and sources.
+- `Concert`: each document represents a tour show, its location, date, setlist version, regular songs, surprise performances, image and sources.
+- `Song`: each document represents a song, its album, era, release year, image and sources.
 
-The many-to-many relationship will use Mongoose references:
+The many-to-many relationship uses Mongoose references:
 
 ```text
 Concert.regularSongs[]                 -> Song._id
 Concert.surprisePerformances[].songs[] -> Song._id
 ```
 
-Concert queries will use `populate()` to return the related song information. Surprise performances will preserve their instrument, order and the individual songs included in each mashup.
+Concert queries use `populate()` to return the related song information. Surprise performances preserve their instrument, order and the individual songs included in each mashup.
 
 ### Music links
 
@@ -322,21 +360,39 @@ The note also records the community response: many swifties gathered in Vienna's
 
 ## File management with Cloudinary
 
-Both collections will support file uploads:
+Both collections support file uploads:
 
-- Concert files will use the `eras-tour/concerts` folder.
-- Song files will use the `eras-tour/songs` folder.
-- A shared storage factory will receive the destination folder as a parameter.
-- The secure URL and Cloudinary `public_id` will be stored.
-- Replaced files will be removed after a successful database update.
-- Deleting a document will also remove its Cloudinary file.
-- If an operation fails after an upload, the newly uploaded resource will be removed whenever possible to avoid orphaned files.
+- Concert files use the `eras-tour/concerts` folder.
+- Song files use the `eras-tour/songs` folder.
+- A shared storage factory receives the destination folder as a parameter.
+- The secure URL and Cloudinary `public_id` are stored.
+- Replaced files are removed after a successful database update.
+- Deleting a document also removes its Cloudinary file.
+- If an operation fails after an upload, the newly uploaded resource is removed whenever possible to avoid orphaned files.
 
 ## Sources, images and traceability
 
-Concert data will be checked against public references such as Taylor Swift's official website, Setlist.fm, music publications, news reports and other specialist sources. Each concert may store the consulted URLs and access dates.
+Concert data has been checked against public references such as Taylor Swift's official website, Setlist.fm, music publications, news reports and other specialist sources. Each concert may store the consulted URLs and access dates.
 
-Images will not be reused merely because they are available online. The project will use original photographs, compatibly licensed resources or images whose reuse is expressly permitted. Authorship, source and licence information will be recorded whenever required.
+Images are not reused merely because they are available online. The project uses original photographs, compatibly licensed resources or images whose reuse is expressly permitted. Authorship, source and licence information is recorded whenever required.
+
+### Test photograph gallery
+
+Four real photographs from Wikimedia Commons were used to verify uploads, replacements and deletions in Cloudinary. Their original sources and full attribution are documented in [`photos/README.md`](photos/README.md).
+
+| folklore — Inglewood | reputation — Inglewood |
+| :---: | :---: |
+| ![Taylor Swift during the folklore set in Inglewood](photos/eras-tour-folklore-paolo-v.jpg) | ![Taylor Swift during the reputation set in Inglewood](photos/eras-tour-reputation-paolo-v.jpg) |
+| Paolo V · CC BY 2.0 | Paolo V · CC BY 2.0 |
+
+| TTPD — Paris | 1989 — London |
+| :---: | :---: |
+| ![Taylor Swift during the TTPD set in Paris](photos/eras-tour-ttpd-paris-vixy13.jpg) | ![View of the 1989 set in London](photos/eras-tour-1989-london-brigidlis.jpg) |
+| Vixy13 · CC BY 4.0 | BrigidLIS · CC BY 4.0 |
+
+### Visual evidence
+
+The README highlights the main Cloudinary workflow above. The [full academic report](docs/MEMORIA.md#5-pruebas-y-evidencias) renders all 35 screenshots from MongoDB Atlas, Cloudinary, Insomnia and the final Vancouver restoration.
 
 ## Endpoints
 
@@ -363,7 +419,7 @@ Local base URL: `http://localhost:5050/api`.
 | PUT | `/concerts/:id` | Update a concert and optionally replace its file |
 | DELETE | `/concerts/:id` | Delete a concert and its Cloudinary file |
 
-The documentation will be expanded during development with filters, accepted fields, request and response examples, validation rules and HTTP status codes.
+The OpenAPI specification and Insomnia guide document the filters, accepted fields, examples, validation rules and HTTP status codes used during testing.
 
 ## Seeds and data quality
 
@@ -381,15 +437,15 @@ The seed uses `upsert` operations, preserves images added through the CRUD and c
 
 - OpenAPI specification for Insomnia: [`docs/openapi.yaml`](docs/openapi.yaml)
 - Ordered testing and screenshot guide: [`docs/INSOMNIA.md`](docs/INSOMNIA.md)
-- Academic report and evidence placeholders: [`docs/MEMORIA.md`](docs/MEMORIA.md)
+- Completed academic report and evidence: [`docs/MEMORIA.md`](docs/MEMORIA.md)
 
 ## Documentation and evidence
 
-An academic report will document the architecture, technical decisions, data sources, Insomnia CRUD tests, MongoDB Atlas collections and relationships, Cloudinary folders, file replacement and deletion, and any issues encountered during development.
+The academic report documents the architecture, technical decisions, data sources, Insomnia CRUD tests, MongoDB Atlas collections and relationships, Cloudinary folders, file replacement and deletion, and the issues encountered during development.
 
 ## Planned configuration
 
-The repository will provide a `.env.example` file without real credentials:
+The repository provides a `.env.example` file without real credentials:
 
 ```env
 PORT=5050
