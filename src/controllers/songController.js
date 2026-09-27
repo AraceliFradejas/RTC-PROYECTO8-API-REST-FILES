@@ -1,6 +1,8 @@
 import Concert from '../models/Concert.js'
 import Song from '../models/Song.js'
 import AppError from '../utils/AppError.js'
+import { escapeRegExp } from '../utils/escapeRegExp.js'
+import { replaceSongImage } from '../utils/replaceSongImage.js'
 import {
   CLOUDINARY_FOLDERS,
   deleteImageFromCloudinary,
@@ -18,8 +20,6 @@ const editableFields = [
   'appleMusicUrl',
   'amazonMusicUrl'
 ]
-
-const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 export const getSongs = async (req, res) => {
   const filters = {}
@@ -147,25 +147,15 @@ export const updateSong = async (req, res, next) => {
       }
     }
 
-    await song.save()
-
-    if (previousImage?.publicId) {
-      try {
-        await deleteImageFromCloudinary(previousImage.publicId)
-      } catch (deletionError) {
-        song.image = previousImage
-        await song.save()
-
-        if (newUploadedImage?.publicId) {
-          await deleteImageFromCloudinary(newUploadedImage.publicId)
-          newUploadedImage = null
-        }
-
-        throw deletionError
-      }
+    if (newUploadedImage) {
+      const replacementImage = newUploadedImage
+      // The helper takes responsibility for cleaning up the replacement image.
+      newUploadedImage = null
+      await replaceSongImage(song, previousImage, replacementImage)
+    } else {
+      await song.save()
     }
 
-    newUploadedImage = null
     res.status(200).json(song)
   } catch (error) {
     if (newUploadedImage?.publicId) {

@@ -3,6 +3,7 @@ import { cancelledConcertData } from '../data/cancelledConcertData.js'
 import Concert from '../models/Concert.js'
 import Song from '../models/Song.js'
 import AppError from '../utils/AppError.js'
+import { escapeRegExp } from '../utils/escapeRegExp.js'
 import {
   CLOUDINARY_FOLDERS,
   deleteImageFromCloudinary,
@@ -33,8 +34,6 @@ const concertPopulate = [
       'title artist album era releaseYear spotifyUrl appleMusicUrl amazonMusicUrl image'
   }
 ]
-
-const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 const collectSongIds = (regularSongs, surprisePerformances) => [
   ...regularSongs,
