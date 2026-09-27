@@ -252,3 +252,31 @@ Las credenciales permanecen en `.env`, excluido del repositorio público. Las ca
 ## 8. Aviso académico
 
 Proyecto independiente, no oficial y sin finalidad comercial, realizado desde el cariño, el respeto y la admiración de una swiftie por Taylor Swift y *The Eras Tour*. Los nombres, marcas y obras citados pertenecen a sus titulares. Los datos se emplean exclusivamente con fines formativos y se acompañan de sus fuentes.
+
+## 9. Mejoras tras la revisión del profesor
+
+El profesor ha valorado el proyecto como completo y lo ha marcado como **superado**. A partir de sus recomendaciones he aplicado dos mejoras para facilitar el mantenimiento del código, recogidas en el commit `6445b5f` (`refactor: centraliza escapeRegExp y extrae rollback de imagen de canciones`).
+
+### 9.1 Utilidad compartida para los filtros de texto
+
+`escapeRegExp` estaba duplicado en `songController.js` y `concertController.js`. He movido la función a [`src/utils/escapeRegExp.js`](../src/utils/escapeRegExp.js) y la he importado en ambos controladores.
+
+La función sigue escapando los caracteres especiales de las expresiones regulares en los filtros por título de canción y ciudad del concierto. Así, el texto recibido se interpreta literalmente y cualquier cambio futuro en esta utilidad se realiza en un solo lugar.
+
+### 9.2 Extracción de la compensación del reemplazo de imagen
+
+El bloque de guardado y rollback de `updateSong` hacía difícil seguir el flujo principal. He extraído esa responsabilidad a [`replaceSongImage(song, previousImage, newImage)`](../src/utils/replaceSongImage.js).
+
+El controlador prepara y asigna los metadatos de la imagen nueva y delega en el helper el guardado y la limpieza de la sustitución. El helper guarda la canción y elimina la imagen anterior de Cloudinary. Si falla ese borrado, restaura los metadatos anteriores, vuelve a guardar e intenta eliminar la imagen nueva antes de propagar el error. También gestiona la limpieza si falla el guardado. El controlador conserva la limpieza de las subidas que fallen antes de delegar en el helper.
+
+Esta separación mantiene el comportamiento existente y permite leer `updateSong` sin recorrer todo el detalle de la compensación. Cuando no se sube una imagen nueva, el controlador guarda directamente los cambios de la canción.
+
+### 9.3 Comprobaciones de la corrección
+
+Se ejecutaron comprobaciones locales con aserciones de Node.js y operaciones de MongoDB y Cloudinary simuladas:
+
+- Escape literal de los caracteres especiales de regex, comprobando además que un punto no se interpreta como un comodín.
+- Seis escenarios del helper: sustitución correcta, ausencia de imagen anterior, fallo del primer guardado, fallo al borrar la imagen anterior, fallo al guardar la restauración y fallo de limpieza con reintento.
+- Dos escenarios de `updateSong`: sustitución correcta y fallo al borrar la imagen anterior, verificando los guardados, las eliminaciones, la respuesta correcta y la propagación del error correspondiente.
+
+Todas las comprobaciones finalizaron correctamente y `git diff --check` no detectó errores de espacios. Estas verificaciones se ejecutaron de forma puntual, sin añadir una suite de pruebas al repositorio ni conectar con servicios externos. Las capturas de la sección 5 corresponden a las pruebas originales del proyecto; no se generaron nuevas evidencias de Insomnia, Atlas o Cloudinary para esta refactorización.

@@ -255,6 +255,15 @@ El proyecto incluye una memoria académica con:
 - Comprobaciones de sustitución y eliminación de archivos.
 - Incidencias encontradas y soluciones aplicadas.
 
+## Mejoras tras la revisión del profesor
+
+El profesor ha marcado el proyecto como **superado** y ha recomendado dos mejoras de mantenimiento, aplicadas en el commit `6445b5f`:
+
+- Centralizar `escapeRegExp` en [`src/utils/escapeRegExp.js`](src/utils/escapeRegExp.js) e importarlo en los controladores de canciones y conciertos. Así se evita duplicar la función que escapa los caracteres especiales en los filtros de texto.
+- Extraer el guardado y la compensación del reemplazo de imagen de `updateSong` a [`src/utils/replaceSongImage.js`](src/utils/replaceSongImage.js). El controlador queda más fácil de leer y conserva la restauración de la imagen anterior y la limpieza de la nueva ante fallos.
+
+Se comprobó el escape de caracteres y los casos de éxito y fallo con MongoDB y Cloudinary simulados. El detalle de la corrección y su validación figura en la [memoria](docs/MEMORIA.md#9-mejoras-tras-la-revisión-del-profesor).
+
 ## Configuración prevista
 
 El repositorio incluirá un archivo `.env.example` sin credenciales reales:
@@ -450,6 +459,15 @@ The seed uses `upsert` operations, preserves images added through the CRUD and c
 ## Documentation and evidence
 
 The academic report documents the architecture, technical decisions, data sources, Insomnia CRUD tests, MongoDB Atlas collections and relationships, Cloudinary folders, file replacement and deletion, and the issues encountered during development.
+
+## Improvements following the teacher's review
+
+The teacher marked the project as **passed** and recommended two maintainability improvements, applied in commit `6445b5f`:
+
+- Move `escapeRegExp` into [`src/utils/escapeRegExp.js`](src/utils/escapeRegExp.js) and import it in both controllers, removing duplicate text-filter escaping logic.
+- Extract persistence and image replacement compensation from `updateSong` into [`src/utils/replaceSongImage.js`](src/utils/replaceSongImage.js), preserving restoration of the previous image and cleanup of the new upload on failure.
+
+Character escaping and success and failure scenarios were checked with simulated MongoDB and Cloudinary operations. The [academic report](docs/MEMORIA.md#9-mejoras-tras-la-revisión-del-profesor) describes the changes and validation.
 
 ## Planned configuration
 
